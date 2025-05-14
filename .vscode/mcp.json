@@ -5,16 +5,20 @@
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
     },
-    "playwright": {
-      "command": "npx",
-      "args": ["@executeautomation/playwright-mcp-server"]
-    },
-    "googleSearch": {
+    "server-sequential-thinking": {
       "command": "npx",
       "args": [
         "-y",
-        "g-search-mcp"
+        "@smithery/cli@latest",
+        "run",
+        "@smithery-ai/server-sequential-thinking",
+        "--key",
+        "3532dcf0-1356-4147-bd63-3291b5e72e90"
       ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@executeautomation/playwright-mcp-server"]
     }
   }
 }
