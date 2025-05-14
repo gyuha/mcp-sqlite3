@@ -4,7 +4,7 @@
 
 
 ## 작업 폴더
-/Users/gyuha/workspace/mcp-sqlite3
+/Users/gyuha/workspace/mcp-sqlite3/
 
 ## 작업 내용
 - project_plan.md 파일에 데이터베이스를 기반으로 해서 만들 수 있는 기능을 작성
