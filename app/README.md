@@ -1,24 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sakila 영화 대여 관리 시스템
+## 시작하기
 
-## Getting Started
+### 개발 환경 설정
 
-First, run the development server:
-
+1. 의존성 설치:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 개발 서버 실행:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. 웹 브라우저에서 `http://localhost:3000`으로 접속
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 프로덕션 배포
+
+#### Docker를 사용한 배포
+
+1. Docker 이미지 빌드:
+```bash
+docker build -t sakila-app .
+```
+
+2. Docker 컨테이너 실행:
+```bash
+docker run -p 3000:3000 sakila-app
+```
+
+#### Docker Compose를 사용한 배포
+
+```bash
+docker-compose up -d
+```kila 데이터베이스를 활용한 Next.js 영화 대여 관리 시스템입니다.
+
+## 프로젝트 소개
+
+이 프로젝트는 Sakila 샘플 데이터베이스를 기반으로 한 영화 대여점 관리 시스템입니다. 다음과 같은 주요 기능을 제공합니다:
+
+- 영화 카탈로그 브라우징 및 검색
+- 고객 관리
+- 대여 및 반납 관리
+- 결제 관리
+- 재고 관리
+- 통계 및 대시보드
+
+## 기술 스택
+
+- **프론트엔드**: Next.js, React, Tailwind CSS
+- **백엔드**: Next.js API Routes
+- **데이터베이스**: SQLite3
+- **배포**: Docker, Docker Compose
 
 ## Learn More
 

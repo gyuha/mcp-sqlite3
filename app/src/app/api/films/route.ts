@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { executeQuery, getPaginatedData } from '@/lib/db-utils';
 import { type FilmFilterParams } from '@/types/film';
 
+export const revalidate = 3600; // 1시간마다 재검증 (초 단위)
+
 export async function GET(request: NextRequest) {
   try {
     // URL 쿼리 파라미터 가져오기

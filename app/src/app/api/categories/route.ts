@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { executeQuery } from '@/lib/db-utils';
 import { Category } from '@/types/film';
 
+export const revalidate = 86400; // 24시간마다 재검증 (초 단위)
+
 export async function GET() {
   try {
     const sql = `
