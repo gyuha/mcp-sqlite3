@@ -5,13 +5,11 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { RentalFilterParams, RentalWithDetails } from '@/types/rental';
 import Pagination from '@/components/Pagination';
-import { 
-  CheckCircleIcon, 
-  XCircleIcon, 
-  ClockIcon,
-  ExclamationCircleIcon,
+import RentalList from '@/components/RentalList';
+import {
   MagnifyingGlassIcon,
-  FunnelIcon
+  FunnelIcon,
+  PlusCircleIcon
 } from '@heroicons/react/24/outline';
 
 export default function RentalsPage() {
@@ -189,35 +187,17 @@ export default function RentalsPage() {
   // 총 페이지 수 계산
   const totalPages = Math.ceil(totalItems / pageSize);
 
-  // 상태에 따른 배지 렌더링
-  const renderStatusBadge = (rental: RentalWithDetails) => {
-    if (rental.return_date) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          <CheckCircleIcon className="w-4 h-4 mr-1" />
-          반납됨
-        </span>
-      );
-    } else if (rental.overdue) {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          <ExclamationCircleIcon className="w-4 h-4 mr-1" />
-          연체
-        </span>
-      );
-    } else {
-      return (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-          <ClockIcon className="w-4 h-4 mr-1" />
-          대여 중
-        </span>
-      );
-    }
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">대여 관리</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">대여 관리</h1>
+        
+        <Link href="/rentals/new" 
+          className="flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+          <PlusCircleIcon className="w-5 h-5 mr-2" />
+          새 대여 생성
+        </Link>
+      </div>
 
       {/* 필터 토글 버튼 */}
       <div className="mb-4">
@@ -257,7 +237,6 @@ export default function RentalsPage() {
                 name="customerId"
                 defaultValue={filters.customerId || ''}
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="고객 ID"
               />
             </div>
             
@@ -269,7 +248,6 @@ export default function RentalsPage() {
                 name="filmId"
                 defaultValue={filters.filmId || ''}
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="영화 ID"
               />
             </div>
             
@@ -281,7 +259,6 @@ export default function RentalsPage() {
                 name="storeId"
                 defaultValue={filters.storeId || ''}
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="매장 ID"
               />
             </div>
             
@@ -338,7 +315,7 @@ export default function RentalsPage() {
             </div>
           </div>
           
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-end space-x-2">
             <button
               type="button"
               onClick={() => handleFilterChange({
@@ -352,7 +329,7 @@ export default function RentalsPage() {
                 sortBy: 'rental_date',
                 sortDirection: 'desc'
               })}
-              className="mr-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               초기화
             </button>
@@ -369,14 +346,13 @@ export default function RentalsPage() {
       {/* 결과 개요 */}
       <div className="mb-4">
         <p className="text-gray-600">
-          총 {totalItems}건의 대여 중 {rentals.length}건 표시 중
+          총 {totalItems}개의 대여 
           {filters.status !== 'all' && (
             <span>
-              {' '}
-              (상태: {
-                filters.status === 'returned' ? '반납됨' : 
-                filters.status === 'outstanding' ? '대여 중' : 
-                filters.status === 'overdue' ? '연체' : '모두'
+              ({
+                filters.status === 'returned' ? '반납됨' :
+                filters.status === 'outstanding' ? '대여 중' :
+                '연체'
               })
             </span>
           )}
@@ -385,120 +361,38 @@ export default function RentalsPage() {
       
       {/* 로딩 상태 */}
       {loading && (
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
         </div>
       )}
       
       {/* 에러 상태 */}
       {error && !loading && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6" role="alert">
-          <p className="font-bold">오류 발생</p>
           <p>{error}</p>
         </div>
       )}
       
-      {/* 대여 목록 테이블 */}
+      {/* 대여 목록 */}
       {!loading && !error && rentals.length > 0 && (
-        <div className="overflow-x-auto bg-white shadow rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">영화</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">고객</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">대여일</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">반납일</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상태</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">연체료</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">액션</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {rentals.map((rental) => (
-                <tr key={rental.rental_id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {rental.rental_id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-blue-600 hover:underline">
-                      <Link href={`/films/${rental.film_id}`}>
-                        {rental.film_title}
-                      </Link>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      ID: {rental.film_id}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-blue-600 hover:underline">
-                      <Link href={`/customers/${rental.customer_id}`}>
-                        {rental.customer_name}
-                      </Link>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {rental.customer_email || '이메일 없음'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(rental.rental_date).toLocaleDateString('ko-KR')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {rental.return_date ? 
-                      new Date(rental.return_date).toLocaleDateString('ko-KR') : 
-                      '미반납'
-                    }
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {renderStatusBadge(rental)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {rental.overdue ? (
-                      <div>
-                        <div className="text-sm font-medium text-red-600">
-                          ${rental.late_fee?.toFixed(2)}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          ({rental.days_overdue?.toFixed(0)}일 연체)
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-gray-500">-</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Link href={`/rentals/${rental.rental_id}`} className="text-blue-600 hover:text-blue-900 mr-3">
-                      상세
-                    </Link>
-                    
-                    {!rental.return_date && (
-                      <button
-                        onClick={() => handleReturnRental(rental.rental_id)}
-                        className="text-green-600 hover:text-green-900"
-                      >
-                        반납
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <RentalList 
+          rentals={rentals} 
+          onReturnRental={handleReturnRental}
+          showActions={true}
+        />
       )}
       
       {/* 결과 없음 표시 */}
       {!loading && !error && rentals.length === 0 && (
         <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500 text-lg">조회된 대여 내역이 없습니다.</p>
-          <p className="text-gray-400 mt-2">다른 필터 조건으로 다시 시도해보세요.</p>
+          <p className="text-gray-500">대여 내역이 없습니다.</p>
         </div>
       )}
       
       {/* 페이지네이션 */}
       {totalPages > 1 && (
         <div className="mt-6">
-          <Pagination
+          <Pagination 
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
