@@ -42,7 +42,7 @@ const FilmCard = ({ film }: FilmCardProps) => {
   const stars = getRatingStars(film.rating);
   
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+    <div className="film-card bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
       <Link href={`/films/${film.film_id}`}>
         <div className="relative h-64 bg-gray-200">
           <Image

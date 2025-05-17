@@ -12,6 +12,7 @@
     "deploy": "next build && next export -o dist",
     "clean": "rimraf .next && rimraf dist",
     "test": "jest",
+    "test:e2e": "playwright test",
     "prod:start": "NODE_ENV=production next start"
   },
   "dependencies": {
@@ -29,9 +30,11 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^15.3.2",
+    "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.17.47",
+    "@types/react": "^19.1.4",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
@@ -39,6 +42,6 @@
     "jest-environment-jsdom": "^29.5.0",
     "rimraf": "^4.3.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   }
 }

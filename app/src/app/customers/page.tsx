@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CustomerFilterParams, Customer } from '@/types/customer';
-import CustomerCard from '@/components/CustomerCard';
 import CustomerFilters from '@/components/CustomerFilters';
 import Pagination from '@/components/Pagination';
 import Link from 'next/link';
@@ -166,11 +165,45 @@ export default function CustomersPage() {
       
       {/* 고객 그리드 */}
       {!loading && !error && customers.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {customers.map((customer) => (
-            <CustomerCard key={customer.customer_id} customer={customer} />
-          ))}
-        </div>
+        <table className="w-full bg-white shadow rounded-lg overflow-hidden">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">고객명</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">이메일</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">매장</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">가입일</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">상태</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">액션</th>
+            </tr>
+          </thead>
+          <tbody>
+            {customers.map((customer) => (
+              <tr key={customer.customer_id} className="border-t border-gray-200 hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  {customer.first_name} {customer.last_name}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.email}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Store #{customer.store_id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {new Date(customer.create_date).toLocaleDateString()}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${customer.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {customer.active ? '활성' : '비활성'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <Link href={`/customers/${customer.customer_id}`} className="text-blue-600 hover:text-blue-900 mr-4">
+                    상세보기
+                  </Link>
+                  <Link href={`/customers/${customer.customer_id}/edit`} className="text-green-600 hover:text-green-900">
+                    수정
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
       
       {/* 페이지네이션 */}
