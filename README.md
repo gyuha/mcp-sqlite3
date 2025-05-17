@@ -18,7 +18,7 @@ Sakila는 비디오 대여점 체인을 위한 데이터베이스를 모델링�
 ### The Sakila Database ERD
 ![ERD](https://github.com/bradleygrant/sakila-sqlite3/raw/main/sakila.png)
 
-데이터베이스는 다음과 같이 가장 많은 영화를 가진 배우를 찾는 멋진 예제 쿼리를 허용합니다 (PostgreSQL 구문):
+데이터베이스는 다음과 같이 가장 많은 영화를 가진 배우를 찾는 멋진 예제 쿼리를 허용합니다 :
 
 ```sql
 SELECT first_name, last_name, count(*) films
@@ -36,7 +36,7 @@ first_name    last_name    films
 GINA          DEGENERES       42
 ```
 
-또는, 모든 매장의 누적 수익을 계산해 보겠습니다 (PostgreSQL 구문):
+또는, 모든 매장의 누적 수익을 계산해 보겠습니다 :
 
 ```sql
 SELECT payment_date, amount, sum(amount) OVER (ORDER BY payment_date)
