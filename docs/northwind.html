@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwind 데이터베이스 분석 보고서</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Northwind 데이터베이스 분석 보고서</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="chinook.html">Chinook</a></li>
+                <li><a href="northwind.html">Northwind</a></li>
+                <li><a href="sakila.html">Sakila</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <section id="overview">
+                <h2>개요</h2>
+                <p>Northwind 데이터베이스는 가상의 무역 회사인 "Northwind Traders"의 영업 데이터를 포함하고 있는 샘플 데이터베이스입니다. 이 보고서는 Northwind 데이터베이스의 구조와 주요 통계를 분석하여 제공합니다.</p>
+                <p>분석 날짜: 2025년 5월 17일</p>
+            </section>
+
+            <section id="structure">
+                <h2>데이터베이스 구조</h2>
+                <p>Northwind 데이터베이스는 다음 13개의 테이블로 구성되어 있습니다:</p>
+                <ol>
+                    <li><code>Customer</code> - 고객 정보</li>
+                    <li><code>Product</code> - 제품 정보</li>
+                    <li><code>Order</code> - 주문 정보</li>
+                    <li><code>OrderDetail</code> - 주문 상세 정보</li>
+                    <li><code>Employee</code> - 직원 정보</li>
+                    <li><code>Category</code> - 제품 카테고리</li>
+                    <li><code>Supplier</code> - 공급업체 정보</li>
+                    <li><code>Shipper</code> - 운송업체 정보</li>
+                    <li><code>Region</code> - 지역 정보</li>
+                    <li><code>Territory</code> - 영업 지역 정보</li>
+                    <li><code>EmployeeTerritory</code> - 직원과 영업 지역 간의 관계</li>
+                    <li><code>CustomerCustomerDemo</code> - 고객 데모그래픽 관계</li>
+                    <li><code>CustomerDemographic</code> - 고객 데모그래픽 정보</li>
+                </ol>
+                <div class="chart-container">
+                    <canvas id="tableRecordsChart"></canvas>
+                </div>
+            </section>
+
+            <section id="tables">
+                <h2>주요 테이블 구조</h2>
+                
+                <article id="customer">
+                    <h3>Customer 테이블</h3>
+                    <p>주요 필드: Id, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone, Fax</p>
+                    <p>전체 고객 수: 91명</p>
+                </article>
+
+                <article id="product">
+                    <h3>Product 테이블</h3>
+                    <p>주요 필드: Id, ProductName, SupplierId, CategoryId, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued</p>
+                    <p>전체 제품 수: 77개</p>
+                </article>
+
+                <article id="order">
+                    <h3>Order 테이블</h3>
+                    <p>주요 필드: Id, CustomerId, EmployeeId, OrderDate, RequiredDate, ShippedDate, ShipVia, Freight, ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode, ShipCountry</p>
+                    <p>전체 주문 수: 830건</p>
+                </article>
+
+                <article id="orderDetail">
+                    <h3>OrderDetail 테이블</h3>
+                    <p>주요 필드: Id, OrderId, ProductId, UnitPrice, Quantity, Discount</p>
+                    <p>전체 주문 상세 항목 수: 2,155건</p>
+                </article>
+
+                <article id="employee">
+                    <h3>Employee 테이블</h3>
+                    <p>주요 필드: Id, LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate, Address, City, Region, PostalCode, Country, HomePhone, Extension, Photo, Notes, ReportsTo, PhotoPath</p>
+                    <p>전체 직원 수: 9명</p>
+                </article>
+
+                <article id="category">
+                    <h3>Category 테이블</h3>
+                    <p>주요 필드: Id, CategoryName, Description</p>
+                    <p>전체 카테고리 수: 8개</p>
+                </article>
+
+                <article id="supplier">
+                    <h3>Supplier 테이블</h3>
+                    <p>주요 필드: Id, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone, Fax, HomePage</p>
+                    <p>전체 공급업체 수: 29개</p>
+                </article>
+            </section>
+
+            <section id="analysis">
+                <h2>데이터 분석 결과</h2>
+                
+                <article id="category-analysis">
+                    <h3>1. 제품 카테고리별 분석</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>카테고리명</th>
+                                <th>제품 수</th>
+                                <th>평균 가격</th>
+                                <th>최대 가격</th>
+                                <th>최소 가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Confections</td>
+                                <td>13</td>
+                                <td>$25.16</td>
+                                <td>$81.00</td>
+                                <td>$9.20</td>
+                            </tr>
+                            <tr>
+                                <td>Seafood</td>
+                                <td>12</td>
+                                <td>$20.68</td>
+                                <td>$62.50</td>
+                                <td>$6.00</td>
+                            </tr>
+                            <tr>
+                                <td>Condiments</td>
+                                <td>12</td>
+                                <td>$23.06</td>
+                                <td>$43.90</td>
+                                <td>$10.00</td>
+                            </tr>
+                            <tr>
+                                <td>Beverages</td>
+                                <td>12</td>
+                                <td>$37.98</td>
+                                <td>$263.50</td>
+                                <td>$4.50</td>
+                            </tr>
+                            <tr>
+                                <td>Dairy Products</td>
+                                <td>10</td>
+                                <td>$28.73</td>
+                                <td>$55.00</td>
+                                <td>$2.50</td>
+                            </tr>
+                            <tr>
+                                <td>Grains/Cereals</td>
+                                <td>7</td>
+                                <td>$20.25</td>
+                                <td>$38.00</td>
+                                <td>$7.00</td>
+                            </tr>
+                            <tr>
+                                <td>Meat/Poultry</td>
+                                <td>6</td>
+                                <td>$54.01</td>
+                                <td>$123.79</td>
+                                <td>$7.45</td>
+                            </tr>
+                            <tr>
+                                <td>Produce</td>
+                                <td>5</td>
+                                <td>$32.37</td>
+                                <td>$53.00</td>
+                                <td>$10.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                    <h4>관찰:</h4>
+                    <ul>
+                        <li><code>Confections</code>(과자류) 카테고리가 가장 많은 제품(13개)을 보유하고 있습니다.</li>
+                        <li><code>Meat/Poultry</code>(육류/가금류) 카테고리가 평균 $54.01로 가장 높은 평균 가격을 가지고 있습니다.</li>
+                        <li><code>Beverages</code>(음료) 카테고리에는 가장 비싼 제품($263.50)이 포함되어 있습니다.</li>
+                        <li><code>Dairy Products</code>(유제품) 카테고리에는 가장 저렴한 제품($2.50)이 포함되어 있습니다.</li>
+                    </ul>
+                </article>
+
+                <article id="order-analysis">
+                    <h3>2. 연도별 주문 분석</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>연도</th>
+                                <th>주문 수</th>
+                                <th>총 운송비</th>
+                                <th>평균 운송비</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2012</td>
+                                <td>152</td>
+                                <td>$10,279.87</td>
+                                <td>$67.63</td>
+                            </tr>
+                            <tr>
+                                <td>2013</td>
+                                <td>408</td>
+                                <td>$32,468.77</td>
+                                <td>$79.58</td>
+                            </tr>
+                            <tr>
+                                <td>2014</td>
+                                <td>270</td>
+                                <td>$22,194.05</td>
+                                <td>$82.20</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="orderYearChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="freightChart"></canvas>
+                    </div>
+                    <h4>관찰:</h4>
+                    <ul>
+                        <li>2013년에 가장 많은 주문(408건)이 이루어졌습니다.</li>
+                        <li>평균 운송비는 매년 증가하는 추세를 보이고 있습니다.</li>
+                        <li>2014년의 데이터는 연말까지 완전하지 않을 수 있으므로, 2013년과 비교하여 주문 수가 감소한 것처럼 보입니다.</li>
+                    </ul>
+                </article>
+
+                <article id="country-analysis">
+                    <h3>3. 국가별 주문 분석 (상위 10개국)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>국가</th>
+                                <th>주문 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>USA</td>
+                                <td>122</td>
+                            </tr>
+                            <tr>
+                                <td>Germany</td>
+                                <td>122</td>
+                            </tr>
+                            <tr>
+                                <td>France</td>
+                                <td>73</td>
+                            </tr>
+                            <tr>
+                                <td>Brazil</td>
+                                <td>70</td>
+                            </tr>
+                            <tr>
+                                <td>UK</td>
+                                <td>56</td>
+                            </tr>
+                            <tr>
+                                <td>Venezuela</td>
+                                <td>46</td>
+                            </tr>
+                            <tr>
+                                <td>Austria</td>
+                                <td>40</td>
+                            </tr>
+                            <tr>
+                                <td>Sweden</td>
+                                <td>37</td>
+                            </tr>
+                            <tr>
+                                <td>Canada</td>
+                                <td>30</td>
+                            </tr>
+                            <tr>
+                                <td>Italy</td>
+                                <td>28</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="countryChart"></canvas>
+                    </div>
+                    <h4>관찰:</h4>
+                    <ul>
+                        <li>미국과 독일이 각각 122건으로 가장 많은 주문을 생성했습니다.</li>
+                        <li>상위 10개국이 전체 주문의 약 75%를 차지하고 있습니다.</li>
+                        <li>유럽 국가들이 상위 10개국 중 6개를 차지하고 있습니다.</li>
+                    </ul>
+                </article>
+
+                <article id="employee-analysis">
+                    <h3>4. 직원별 판매 실적</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>직원명</th>
+                                <th>처리한 주문 수</th>
+                                <th>총 판매액</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Margaret Peacock</td>
+                                <td>420</td>
+                                <td>$232,890.85</td>
+                            </tr>
+                            <tr>
+                                <td>Janet Leverling</td>
+                                <td>321</td>
+                                <td>$202,812.84</td>
+                            </tr>
+                            <tr>
+                                <td>Nancy Davolio</td>
+                                <td>345</td>
+                                <td>$192,107.60</td>
+                            </tr>
+                            <tr>
+                                <td>Andrew Fuller</td>
+                                <td>241</td>
+                                <td>$166,537.76</td>
+                            </tr>
+                            <tr>
+                                <td>Laura Callahan</td>
+                                <td>260</td>
+                                <td>$126,862.28</td>
+                            </tr>
+                            <tr>
+                                <td>Robert King</td>
+                                <td>176</td>
+                                <td>$124,568.24</td>
+                            </tr>
+                            <tr>
+                                <td>Anne Dodsworth</td>
+                                <td>107</td>
+                                <td>$77,308.07</td>
+                            </tr>
+                            <tr>
+                                <td>Michael Suyama</td>
+                                <td>168</td>
+                                <td>$73,913.13</td>
+                            </tr>
+                            <tr>
+                                <td>Steven Buchanan</td>
+                                <td>117</td>
+                                <td>$68,792.28</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="employeeChart"></canvas>
+                    </div>
+                    <h4>관찰:</h4>
+                    <ul>
+                        <li>Margaret Peacock가 가장 많은 주문(420건)을 처리했으며, 가장 높은 총 판매액($232,890.85)을 기록했습니다.</li>
+                        <li>직원들의 주문 처리 수와 총 판매액 사이에는 상관관계가 있지만, 일부 직원들은 적은 주문으로도 높은 판매액을 기록했습니다.</li>
+                        <li>상위 3명의 직원이 전체 판매액의 약 50%를 담당하고 있습니다.</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section id="conclusion">
+                <h2>결론 및 시사점</h2>
+                <ol>
+                    <li><strong>제품 다양성</strong>: Northwind는 8개의 카테고리에 걸쳐 다양한 제품을 제공하고 있으며, 특히 과자류, 해산물, 조미료, 음료 카테고리에 중점을 두고 있습니다.</li>
+                    <li><strong>가격 전략</strong>: 카테고리별로 가격 전략이 다르며, 육류/가금류와 음료 카테고리는 고가 전략을, 유제품과 해산물은 넓은 가격 범위를 가지고 있습니다.</li>
+                    <li><strong>성장 추세</strong>: 2012년부터 2013년까지 주문량이 크게 증가했으며, 이는 사업 확장을 나타냅니다.</li>
+                    <li><strong>국제적 영업</strong>: 주요 시장은 미국, 독일을 포함한 유럽 국가들이며, 향후 아시아 및 기타 지역으로의 확장 가능성이 있습니다.</li>
+                    <li><strong>직원 생산성</strong>: 일부 직원들의 높은 생산성이 전체 판매에 크게 기여하고 있으므로, 이들의 판매 기법과 고객 관리 방식을 분석하여 다른 직원들에게도 적용할 수 있을 것입니다.</li>
+                    <li><strong>운송비 증가</strong>: 평균 운송비가 매년 증가하고 있으므로, 운송 방식과 물류 최적화에 대한 검토가 필요합니다.</li>
+                </ol>
+                <p>이 분석은 Northwind 데이터베이스의 핵심 측면을 다루고 있으며, 더 자세한 분석을 위해서는 추가적인 데이터 마이닝과 다양한 비즈니스 질문에 대한 조사가 필요합니다.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Northwind 데이터베이스 분석 보고서 - 2025년 5월 17일</p>
+        </footer>
+    </div>
+
+    <script>
+        // 테이블 레코드 수 차트
+        const tableRecordsChart = new Chart(
+            document.getElementById('tableRecordsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['주문 상세', '주문', '고객', '제품', '공급업체', '직원', '카테고리', '기타'],
+                    datasets: [{
+                        label: '레코드 수',
+                        data: [2155, 830, 91, 77, 29, 9, 8, 6],
+                        backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                        borderColor: 'rgb(255, 206, 86)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '테이블별 레코드 수'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 카테고리별 제품 수 차트
+        const categoryChart = new Chart(
+            document.getElementById('categoryChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['Confections', 'Seafood', 'Condiments', 'Beverages', 'Dairy Products', 'Grains/Cereals', 'Meat/Poultry', 'Produce'],
+                    datasets: [{
+                        label: '제품 수',
+                        data: [13, 12, 12, 12, 10, 7, 6, 5],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(201, 203, 207, 0.7)',
+                            'rgba(0, 200, 150, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '카테고리별 제품 수'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 카테고리별 평균 가격 차트
+        const priceChart = new Chart(
+            document.getElementById('priceChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Meat/Poultry', 'Beverages', 'Produce', 'Dairy Products', 'Confections', 'Condiments', 'Seafood', 'Grains/Cereals'],
+                    datasets: [{
+                        label: '평균 가격($)',
+                        data: [54.01, 37.98, 32.37, 28.73, 25.16, 23.06, 20.68, 20.25],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '카테고리별 평균 가격'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 연도별 주문 수 차트
+        const orderYearChart = new Chart(
+            document.getElementById('orderYearChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['2012', '2013', '2014'],
+                    datasets: [{
+                        label: '주문 수',
+                        data: [152, 408, 270],
+                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                        borderColor: 'rgb(153, 102, 255)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '연도별 주문 수'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 연도별 평균 운송비 차트
+        const freightChart = new Chart(
+            document.getElementById('freightChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['2012', '2013', '2014'],
+                    datasets: [{
+                        label: '평균 운송비($)',
+                        data: [67.63, 79.58, 82.20],
+                        fill: false,
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '연도별 평균 운송비'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 국가별 주문 수 차트
+        const countryChart = new Chart(
+            document.getElementById('countryChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['USA', 'Germany', 'France', 'Brazil', 'UK', 'Venezuela', 'Austria', 'Sweden', 'Canada', 'Italy'],
+                    datasets: [{
+                        label: '주문 수',
+                        data: [122, 122, 73, 70, 56, 46, 40, 37, 30, 28],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)',
+                            'rgba(201, 203, 207, 0.5)',
+                            'rgba(0, 200, 150, 0.5)',
+                            'rgba(100, 100, 255, 0.5)',
+                            'rgba(255, 100, 100, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 206, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(153, 102, 255)',
+                            'rgb(255, 159, 64)',
+                            'rgb(201, 203, 207)',
+                            'rgb(0, 200, 150)',
+                            'rgb(100, 100, 255)',
+                            'rgb(255, 100, 100)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '국가별 주문 수 (상위 10개국)'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 직원별 판매 실적 차트
+        const employeeChart = new Chart(
+            document.getElementById('employeeChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Margaret Peacock', 'Janet Leverling', 'Nancy Davolio', 'Andrew Fuller', 'Laura Callahan', 'Robert King', 'Anne Dodsworth', 'Michael Suyama', 'Steven Buchanan'],
+                    datasets: [
+                        {
+                            label: '처리한 주문 수',
+                            data: [420, 321, 345, 241, 260, 176, 107, 168, 117],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '총 판매액($)',
+                            data: [232890.85, 202812.84, 192107.60, 166537.76, 126862.28, 124568.24, 77308.07, 73913.13, 68792.28],
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '직원별 판매 실적'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '주문 수'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: '판매액($)'
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite 샘플 데이터베이스</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>SQLite 샘플 데이터베이스</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="chinook.html">Chinook</a></li>
+                <li><a href="northwind.html">Northwind</a></li>
+                <li><a href="sakila.html">Sakila</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <section id="intro">
+                <h2>소개</h2>
+                <p>이 웹사이트는 다양한 SQLite 샘플 데이터베이스에 대한 정보와 분석을 제공합니다. 각 데이터베이스는 다양한 비즈니스 시나리오를 모델링하고 있어 SQL 학습 및 데이터 분석 실습에 이상적입니다.</p>
+                <div class="chart-container">
+                    <canvas id="dbSizeChart"></canvas>
+                </div>
+            </section>
+
+            <section id="sakila">
+                <h2>1. 사킬라 데이터베이스</h2>
+                <p>Sakila 샘플 데이터베이스는 MySQL AB 문서 팀의 전 멤버인 Mike Hillyer에 의해 처음 개발되었습니다. 이는 책, 튜토리얼, 기사, 샘플 등에서 사용될 수 있는 표준 스키마를 제공하기 위한 것입니다.</p>
+                <p>사킬라 데이터베이스는 최고의 예제 데이터베이스 중 하나로, 원래 MySQL에 의해 생성되었으며 BSD 라이선스의 조건 하에 오픈 소스화되었습니다.</p>
+                <p>Sakila는 비디오 대여점 체인을 위한 데이터베이스를 모델링합니다. 여기에는 다음에 대한 방대한 정보가 포함되어 있습니다:</p>
+                <ul>
+                    <li>영화 제목</li>
+                    <li>배우, 장르 등</li>
+                    <li>어떤 상점이 어떤 영화를 재고로 보유하고 있는지</li>
+                    <li>거래 및 지불</li>
+                    <li>고객</li>
+                    <li>직원</li>
+                </ul>
+                <p><a href="sakila.html">자세한 Sakila 데이터베이스 분석 보기</a></p>
+            </section>
+
+            <section id="chinook">
+                <h2>2. Chinook 데이터베이스</h2>
+                <p>치누크는 SQL Server, Oracle, MySQL 등에서 사용할 수 있는 샘플 데이터베이스입니다. 단일 SQL 스크립트를 실행하여 생성할 수 있습니다. 치누크 데이터베이스는 Northwind 데이터베이스의 대안으로, 단일 및 다중 데이터베이스 서버를 대상으로 하는 ORM 도구의 데모 및 테스트에 이상적입니다.</p>
+                <p>Chinook 데이터 모델은 아티스트, 앨범, 미디어 트랙, 송장 및 고객을 포함하는 디지털 미디어 상점을 나타냅니다.</p>
+                <p><a href="chinook.html">자세한 Chinook 데이터베이스 분석 보기</a></p>
+            </section>
+
+            <section id="northwind">
+                <h2>3. Northwind 데이터베이스</h2>
+                <p>Northwind는 Microsoft Access 2000 샘플 데이터베이스의 버전으로, SQLite3에 맞게 재구성되었습니다.</p>
+                <p>Northwind 샘플 데이터베이스는 Microsoft Access와 함께 제공되어 소규모 비즈니스 고객, 주문, 재고, 구매, 공급업체, 배송 및 직원을 관리하기 위한 튜토리얼 스키마로 사용되었습니다. Northwind는 고객, 주문, 재고, 구매, 공급업체, 배송, 직원 및 단일 입력 회계와 함께 소규모 비즈니스 ERP를 위한 훌륭한 튜토리얼 스키마입니다.</p>
+                <p><a href="northwind.html">자세한 Northwind 데이터베이스 분석 보기</a></p>
+            </section>
+            
+            <section id="comparison">
+                <h2>데이터베이스 비교</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>데이터베이스</th>
+                            <th>비즈니스 모델</th>
+                            <th>테이블 수</th>
+                            <th>사용 사례</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sakila</td>
+                            <td>비디오 대여점</td>
+                            <td>16</td>
+                            <td>복잡한 관계 및 다대다 관계 학습</td>
+                        </tr>
+                        <tr>
+                            <td>Chinook</td>
+                            <td>디지털 미디어 스토어</td>
+                            <td>11</td>
+                            <td>미디어 콘텐츠 관리, 판매 추적</td>
+                        </tr>
+                        <tr>
+                            <td>Northwind</td>
+                            <td>소규모 무역 회사</td>
+                            <td>13</td>
+                            <td>주문 처리, 재고 관리, 인사</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="chart-container">
+                    <canvas id="tablesChart"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>SQLite 샘플 데이터베이스 분석 - 2025년 5월 17일</p>
+        </footer>
+    </div>
+
+    <script>
+        // 차트 1: 데이터베이스 크기 비교
+        const dbSizeChart = new Chart(
+            document.getElementById('dbSizeChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Sakila', 'Chinook', 'Northwind'],
+                    datasets: [{
+                        label: '테이블 별 레코드 수',
+                        data: [16044, 15316, 2155], // 대여, 플레이리스트 트랙, 주문 상세
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 206, 86)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '데이터베이스별 주요 테이블 레코드 수'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 차트 2: 테이블 수 비교
+        const tablesChart = new Chart(
+            document.getElementById('tablesChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['Sakila', 'Chinook', 'Northwind'],
+                    datasets: [{
+                        label: '테이블 수',
+                        data: [16, 11, 13],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '데이터베이스별 테이블 수'
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+</body>
+</html>

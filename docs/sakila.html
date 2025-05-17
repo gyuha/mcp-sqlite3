@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakila 데이터베이스 분석 리포트</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Sakila 데이터베이스 분석 리포트</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="chinook.html">Chinook</a></li>
+                <li><a href="northwind.html">Northwind</a></li>
+                <li><a href="sakila.html">Sakila</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <section id="overview">
+                <h2>개요</h2>
+                <p>Sakila 데이터베이스는 영화 대여점의 업무를 모델링한 샘플 데이터베이스입니다. 본 리포트는 이 데이터베이스의 구조 및 데이터 분석 결과를 제공합니다. 분석 날짜: 2025년 5월 17일</p>
+            </section>
+
+            <section id="structure">
+                <h2>데이터베이스 구조</h2>
+                <p>Sakila 데이터베이스는 다음과 같은 16개의 테이블로 구성되어 있습니다:</p>
+                <pre>actor, address, category, city, country, customer, film, film_actor, 
+film_category, film_text, inventory, language, payment, rental, staff, store</pre>
+                
+                <h3>주요 테이블 구조:</h3>
+                
+                <article id="film">
+                    <h4>Film (영화)</h4>
+                    <ul>
+                        <li>영화 ID, 제목, 설명, 출시 연도, 언어 ID, 원본 언어 ID</li>
+                        <li>대여 기간, 대여 요금, 영화 길이, 교체 비용</li>
+                        <li>등급(G, PG, PG-13, R, NC-17), 특수 기능, 최종 업데이트</li>
+                    </ul>
+                </article>
+
+                <article id="customer">
+                    <h4>Customer (고객)</h4>
+                    <ul>
+                        <li>고객 ID, 매장 ID, 이름, 성, 이메일, 주소 ID</li>
+                        <li>활성 상태, 생성 날짜, 최종 업데이트</li>
+                    </ul>
+                </article>
+
+                <article id="rental">
+                    <h4>Rental (대여)</h4>
+                    <ul>
+                        <li>대여 ID, 대여 날짜, 재고 ID, 고객 ID</li>
+                        <li>반납 날짜, 직원 ID, 최종 업데이트</li>
+                    </ul>
+                </article>
+
+                <article id="payment">
+                    <h4>Payment (결제)</h4>
+                    <ul>
+                        <li>결제 ID, 고객 ID, 직원 ID, 대여 ID</li>
+                        <li>금액, 결제 날짜, 최종 업데이트</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section id="statistics">
+                <h2>주요 통계</h2>
+                
+                <article id="basic-stats">
+                    <h3>기본 통계</h3>
+                    <ul>
+                        <li><strong>총 영화 수</strong>: 1,000편</li>
+                        <li><strong>총 고객 수</strong>: 599명</li>
+                        <li><strong>총 대여 건수</strong>: 16,044건</li>
+                        <li><strong>총 매출</strong>: $67,416.51</li>
+                        <li><strong>평균 대여 기간</strong>: 5.03일</li>
+                        <li><strong>미반납된 대여 건수</strong>: 183건</li>
+                        <li><strong>고객당 평균 대여 횟수</strong>: 26.78회</li>
+                    </ul>
+                    <div class="chart-container">
+                        <canvas id="basicStatsChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="category-stats">
+                    <h3>카테고리별 영화 수</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>카테고리</th>
+                                <th>영화 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Sports</td><td>74</td></tr>
+                            <tr><td>Foreign</td><td>73</td></tr>
+                            <tr><td>Family</td><td>69</td></tr>
+                            <tr><td>Documentary</td><td>68</td></tr>
+                            <tr><td>Animation</td><td>66</td></tr>
+                            <tr><td>Action</td><td>64</td></tr>
+                            <tr><td>New</td><td>63</td></tr>
+                            <tr><td>Drama</td><td>62</td></tr>
+                            <tr><td>Sci-Fi</td><td>61</td></tr>
+                            <tr><td>Games</td><td>61</td></tr>
+                            <tr><td>Children</td><td>60</td></tr>
+                            <tr><td>Comedy</td><td>58</td></tr>
+                            <tr><td>Travel</td><td>57</td></tr>
+                            <tr><td>Classics</td><td>57</td></tr>
+                            <tr><td>Horror</td><td>56</td></tr>
+                            <tr><td>Music</td><td>51</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="yearly-revenue">
+                    <h3>연도별 매출</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>연도</th>
+                                <th>매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2005</td><td>$66,902.33</td></tr>
+                            <tr><td>2006</td><td>$514.18</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="yearlyRevenueChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="weekday-rentals">
+                    <h3>요일별 대여 패턴</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>요일</th>
+                                <th>대여 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>일요일</td><td>2,320</td></tr>
+                            <tr><td>월요일</td><td>2,247</td></tr>
+                            <tr><td>화요일</td><td>2,463</td></tr>
+                            <tr><td>수요일</td><td>2,231</td></tr>
+                            <tr><td>목요일</td><td>2,200</td></tr>
+                            <tr><td>금요일</td><td>2,272</td></tr>
+                            <tr><td>토요일</td><td>2,311</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="weekdayChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="film-length">
+                    <h3>영화 길이별 분포</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>영화 길이</th>
+                                <th>영화 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1시간 미만</td><td>96</td></tr>
+                            <tr><td>1~1.5시간</td><td>229</td></tr>
+                            <tr><td>1.5~2시간</td><td>218</td></tr>
+                            <tr><td>2~2.5시간</td><td>215</td></tr>
+                            <tr><td>2.5시간 이상</td><td>242</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="filmLengthChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="rental-rate">
+                    <h3>대여료별 영화 분포</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>대여료</th>
+                                <th>영화 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>$0.99</td><td>341</td></tr>
+                            <tr><td>$2.99</td><td>323</td></tr>
+                            <tr><td>$4.99</td><td>336</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="rentalRateChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="rating">
+                    <h3>등급별 영화 분포</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>등급</th>
+                                <th>영화 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>PG-13</td><td>223</td></tr>
+                            <tr><td>NC-17</td><td>210</td></tr>
+                            <tr><td>R</td><td>195</td></tr>
+                            <tr><td>PG</td><td>194</td></tr>
+                            <tr><td>G</td><td>178</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="ratingChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="monthly-rentals">
+                    <h3>월별 대여 추이</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>월</th>
+                                <th>대여 건수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2005-05</td><td>1,156</td></tr>
+                            <tr><td>2005-06</td><td>2,311</td></tr>
+                            <tr><td>2005-07</td><td>6,709</td></tr>
+                            <tr><td>2005-08</td><td>5,686</td></tr>
+                            <tr><td>2006-02</td><td>182</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="monthlyRentalsChart"></canvas>
+                    </div>
+                </article>
+            </section>
+
+            <section id="insights">
+                <h2>주요 인사이트</h2>
+                
+                <article id="top-customers">
+                    <h3>상위 10명의 고객</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>고객 ID</th>
+                                <th>이름</th>
+                                <th>성</th>
+                                <th>대여 횟수</th>
+                                <th>지출 금액</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>148</td><td>ELEANOR</td><td>HUNT</td><td>46</td><td>$216.54</td></tr>
+                            <tr><td>526</td><td>KARL</td><td>SEAL</td><td>45</td><td>$221.55</td></tr>
+                            <tr><td>236</td><td>MARCIA</td><td>DEAN</td><td>42</td><td>$175.58</td></tr>
+                            <tr><td>144</td><td>CLARA</td><td>SHAW</td><td>42</td><td>$195.58</td></tr>
+                            <tr><td>75</td><td>TAMMY</td><td>SANDERS</td><td>41</td><td>$155.59</td></tr>
+                            <tr><td>469</td><td>WESLEY</td><td>BULL</td><td>40</td><td>$177.60</td></tr>
+                            <tr><td>197</td><td>SUE</td><td>PETERS</td><td>40</td><td>$154.60</td></tr>
+                            <tr><td>468</td><td>TIM</td><td>CARY</td><td>39</td><td>$175.61</td></tr>
+                            <tr><td>178</td><td>MARION</td><td>SNYDER</td><td>39</td><td>$194.61</td></tr>
+                            <tr><td>137</td><td>RHONDA</td><td>KENNEDY</td><td>39</td><td>$194.61</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="topCustomersChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="popular-films">
+                    <h3>가장 인기 있는 영화 10편</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>영화 ID</th>
+                                <th>제목</th>
+                                <th>대여 횟수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>103</td><td>BUCKET BROTHERHOOD</td><td>34</td></tr>
+                            <tr><td>738</td><td>ROCKETEER MOTHER</td><td>33</td></tr>
+                            <tr><td>767</td><td>SCALAWAG DUCK</td><td>32</td></tr>
+                            <tr><td>730</td><td>RIDGEMONT SUBMARINE</td><td>32</td></tr>
+                            <tr><td>489</td><td>JUGGLER HARDLY</td><td>32</td></tr>
+                            <tr><td>382</td><td>GRIT CLOCKWORK</td><td>32</td></tr>
+                            <tr><td>331</td><td>FORWARD TEMPLE</td><td>32</td></tr>
+                            <tr><td>1000</td><td>ZORRO ARK</td><td>31</td></tr>
+                            <tr><td>973</td><td>WIFE TURN</td><td>31</td></tr>
+                            <tr><td>891</td><td>TIMBERLAND SKY</td><td>31</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="popularFilmsChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="top-actors">
+                    <h3>출연 영화가 가장 많은 배우 10명</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>배우 ID</th>
+                                <th>배우 이름</th>
+                                <th>출연 영화 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>107</td><td>GINA DEGENERES</td><td>42</td></tr>
+                            <tr><td>102</td><td>WALTER TORN</td><td>41</td></tr>
+                            <tr><td>198</td><td>MARY KEITEL</td><td>40</td></tr>
+                            <tr><td>181</td><td>MATTHEW CARREY</td><td>39</td></tr>
+                            <tr><td>23</td><td>SANDRA KILMER</td><td>37</td></tr>
+                            <tr><td>81</td><td>SCARLETT DAMON</td><td>36</td></tr>
+                            <tr><td>13</td><td>UMA WOOD</td><td>35</td></tr>
+                            <tr><td>37</td><td>VAL BOLGER</td><td>35</td></tr>
+                            <tr><td>60</td><td>HENRY BERRY</td><td>35</td></tr>
+                            <tr><td>106</td><td>GROUCHO DUNST</td><td>35</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="topActorsChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="top-countries">
+                    <h3>매출이 가장 높은 국가 10개</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>국가</th>
+                                <th>총 매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>India</td><td>$6,630.27</td></tr>
+                            <tr><td>China</td><td>$5,802.73</td></tr>
+                            <tr><td>United States</td><td>$4,110.32</td></tr>
+                            <tr><td>Japan</td><td>$3,471.74</td></tr>
+                            <tr><td>Mexico</td><td>$3,307.04</td></tr>
+                            <tr><td>Brazil</td><td>$3,200.52</td></tr>
+                            <tr><td>Russian Federation</td><td>$3,045.87</td></tr>
+                            <tr><td>Philippines</td><td>$2,381.32</td></tr>
+                            <tr><td>Turkey</td><td>$1,662.12</td></tr>
+                            <tr><td>Nigeria</td><td>$1,511.48</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="topCountriesChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="store-performance">
+                    <h3>매장별 매출 및 대여 수</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>매장 ID</th>
+                                <th>대여 건수</th>
+                                <th>총 매출</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>8,040</td><td>$33,524.62</td></tr>
+                            <tr><td>2</td><td>8,004</td><td>$33,881.94</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="chart-container">
+                        <canvas id="storePerformanceChart"></canvas>
+                    </div>
+                </article>
+            </section>
+
+            <section id="conclusion">
+                <h2>결론 및 제안</h2>
+                <ol>
+                    <li>
+                        <strong>카테고리 인사이트</strong>:
+                        <ul>
+                            <li>스포츠, 외국 영화, 가족 영화 카테고리의 비중이 높습니다.</li>
+                            <li>추가 구매시 이러한 인기 카테고리를 우선적으로 고려할 수 있습니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>계절성 패턴</strong>:
+                        <ul>
+                            <li>2005년 7월에 가장 많은 대여가 있었으며, 이는 여름 시즌에 대여가 증가함을 시사합니다.</li>
+                            <li>여름 시즌에 특별 프로모션을 고려해볼만 합니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>고객 충성도</strong>:
+                        <ul>
+                            <li>상위 10명의 고객이 평균 41회 이상의 대여를 했으며, 이는 전체 고객 평균(26.78회)보다 훨씬 높습니다.</li>
+                            <li>VIP 고객을 위한 충성도 프로그램 도입을 고려할 수 있습니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>요일별 패턴</strong>:
+                        <ul>
+                            <li>화요일에 대여가 가장 많고, 목요일에 가장 적습니다.</li>
+                            <li>목요일에 특별 할인을 제공하여 수요를 증가시킬 수 있습니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>미반납 문제</strong>:
+                        <ul>
+                            <li>183건의 미반납 대여가 있으며, 이는 재고 관리에 영향을 줄 수 있습니다.</li>
+                            <li>반납 독려를 위한 전략 개발이 필요합니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>국가별 매출</strong>:
+                        <ul>
+                            <li>인도, 중국, 미국이 가장 높은 매출을 보이며, 이러한 국가의 고객 요구에 맞는 영화 확보가 중요합니다.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>매장 성과</strong>:
+                        <ul>
+                            <li>두 매장의 대여 건수는 비슷하지만, 매장 2의 매출이 약간 더 높습니다.</li>
+                            <li>매장 2의 성공 요인을 분석하여 매장 1에 적용할 수 있습니다.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+        </main>
+
+        <footer>
+            <p>Sakila 데이터베이스 분석 리포트 - 2025년 5월 17일</p>
+        </footer>
+    </div>
+
+    <script>
+        // 카테고리별 영화 수 차트
+        const categoryChart = new Chart(
+            document.getElementById('categoryChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Sports', 'Foreign', 'Family', 'Documentary', 'Animation', 'Action', 'New', 'Drama', 'Sci-Fi', 'Games', 'Children', 'Comedy', 'Travel', 'Classics', 'Horror', 'Music'],
+                    datasets: [{
+                        label: '영화 수',
+                        data: [74, 73, 69, 68, 66, 64, 63, 62, 61, 61, 60, 58, 57, 57, 56, 51],
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '카테고리별 영화 수'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 요일별 대여 패턴 차트
+        const weekdayChart = new Chart(
+            document.getElementById('weekdayChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+                    datasets: [{
+                        label: '대여 수',
+                        data: [2320, 2247, 2463, 2231, 2200, 2272, 2311],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(201, 203, 207, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 206, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(153, 102, 255)',
+                            'rgb(255, 159, 64)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '요일별 대여 패턴'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 영화 길이별 분포 차트
+        const filmLengthChart = new Chart(
+            document.getElementById('filmLengthChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['1시간 미만', '1~1.5시간', '1.5~2시간', '2~2.5시간', '2.5시간 이상'],
+                    datasets: [{
+                        label: '영화 수',
+                        data: [96, 229, 218, 215, 242],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '영화 길이별 분포'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 대여료별 영화 분포 차트
+        const rentalRateChart = new Chart(
+            document.getElementById('rentalRateChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['$0.99', '$2.99', '$4.99'],
+                    datasets: [{
+                        label: '영화 수',
+                        data: [341, 323, 336],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '대여료별 영화 분포'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 등급별 영화 분포 차트
+        const ratingChart = new Chart(
+            document.getElementById('ratingChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['PG-13', 'NC-17', 'R', 'PG', 'G'],
+                    datasets: [{
+                        label: '영화 수',
+                        data: [223, 210, 195, 194, 178],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '등급별 영화 분포'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 월별 대여 추이 차트
+        const monthlyRentalsChart = new Chart(
+            document.getElementById('monthlyRentalsChart'),
+            {
+                type: 'line',
+                data: {
+                    labels: ['2005-05', '2005-06', '2005-07', '2005-08', '2006-02'],
+                    datasets: [{
+                        label: '대여 건수',
+                        data: [1156, 2311, 6709, 5686, 182],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '월별 대여 추이'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 연도별 매출 차트
+        const yearlyRevenueChart = new Chart(
+            document.getElementById('yearlyRevenueChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['2005', '2006'],
+                    datasets: [{
+                        label: '매출($)',
+                        data: [66902.33, 514.18],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(75, 192, 192)',
+                            'rgb(153, 102, 255)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '연도별 매출'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 상위 10명의 고객 차트
+        const topCustomersChart = new Chart(
+            document.getElementById('topCustomersChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['ELEANOR HUNT', 'KARL SEAL', 'MARCIA DEAN', 'CLARA SHAW', 'TAMMY SANDERS', 'WESLEY BULL', 'SUE PETERS', 'TIM CARY', 'MARION SNYDER', 'RHONDA KENNEDY'],
+                    datasets: [
+                        {
+                            label: '대여 횟수',
+                            data: [46, 45, 42, 42, 41, 40, 40, 39, 39, 39],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '지출 금액($)',
+                            data: [216.54, 221.55, 175.58, 195.58, 155.59, 177.60, 154.60, 175.61, 194.61, 194.61],
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '상위 10명의 고객'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'category',
+                            position: 'left',
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+        // 가장 인기 있는 영화 10편 차트
+        const popularFilmsChart = new Chart(
+            document.getElementById('popularFilmsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['BUCKET BROTHERHOOD', 'ROCKETEER MOTHER', 'SCALAWAG DUCK', 'RIDGEMONT SUBMARINE', 'JUGGLER HARDLY', 'GRIT CLOCKWORK', 'FORWARD TEMPLE', 'ZORRO ARK', 'WIFE TURN', 'TIMBERLAND SKY'],
+                    datasets: [{
+                        label: '대여 횟수',
+                        data: [34, 33, 32, 32, 32, 32, 32, 31, 31, 31],
+                        backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                        borderColor: 'rgb(255, 206, 86)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '가장 인기 있는 영화 10편'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 출연 영화가 가장 많은 배우 10명 차트
+        const topActorsChart = new Chart(
+            document.getElementById('topActorsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['GINA DEGENERES', 'WALTER TORN', 'MARY KEITEL', 'MATTHEW CARREY', 'SANDRA KILMER', 'SCARLETT DAMON', 'UMA WOOD', 'VAL BOLGER', 'HENRY BERRY', 'GROUCHO DUNST'],
+                    datasets: [{
+                        label: '출연 영화 수',
+                        data: [42, 41, 40, 39, 37, 36, 35, 35, 35, 35],
+                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                        borderColor: 'rgb(153, 102, 255)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '출연 영화가 가장 많은 배우 10명'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 매출이 가장 높은 국가 10개 차트
+        const topCountriesChart = new Chart(
+            document.getElementById('topCountriesChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['India', 'China', 'United States', 'Japan', 'Mexico', 'Brazil', 'Russian Federation', 'Philippines', 'Turkey', 'Nigeria'],
+                    datasets: [{
+                        label: '총 매출($)',
+                        data: [6630.27, 5802.73, 4110.32, 3471.74, 3307.04, 3200.52, 3045.87, 2381.32, 1662.12, 1511.48],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '매출이 가장 높은 국가 10개'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 매장별 매출 및 대여 수 차트
+        const storePerformanceChart = new Chart(
+            document.getElementById('storePerformanceChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['매장 1', '매장 2'],
+                    datasets: [
+                        {
+                            label: '대여 건수',
+                            data: [8040, 8004],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: '총 매출($)',
+                            data: [33524.62, 33881.94],
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '매장별 매출 및 대여 수'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '대여 건수'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: '매출($)'
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+        // 기본 통계 차트
+        const basicStatsChart = new Chart(
+            document.getElementById('basicStatsChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: ['영화', '고객', '직원', '매장'],
+                    datasets: [{
+                        label: '수량',
+                        data: [1000, 599, 2, 2],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Sakila 데이터베이스 기본 통계'
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+</body>
+</html>

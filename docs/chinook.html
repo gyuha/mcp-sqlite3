@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinook 데이터베이스 분석 리포트</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Chinook 데이터베이스 분석 리포트</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">홈</a></li>
+                <li><a href="chinook.html">Chinook</a></li>
+                <li><a href="northwind.html">Northwind</a></li>
+                <li><a href="sakila.html">Sakila</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <section id="overview">
+                <h2>개요</h2>
+                <p>Chinook 데이터베이스는 음악 스토어의 디지털 미디어 판매를 관리하기 위한 샘플 데이터베이스입니다. 이 리포트는 Chinook 데이터베이스의 구조와 데이터를 분석하여 주요 통계와 인사이트를 제공합니다.</p>
+            </section>
+
+            <section id="structure">
+                <h2>데이터베이스 구조</h2>
+                <p>Chinook 데이터베이스는 다음과 같은 11개의 테이블로 구성되어 있습니다:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>테이블</th>
+                            <th>레코드 수</th>
+                            <th>설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>albums</td>
+                            <td>347</td>
+                            <td>음악 앨범 정보</td>
+                        </tr>
+                        <tr>
+                            <td>artists</td>
+                            <td>275</td>
+                            <td>음악 아티스트 정보</td>
+                        </tr>
+                        <tr>
+                            <td>customers</td>
+                            <td>59</td>
+                            <td>고객 정보</td>
+                        </tr>
+                        <tr>
+                            <td>employees</td>
+                            <td>8</td>
+                            <td>직원 정보</td>
+                        </tr>
+                        <tr>
+                            <td>genres</td>
+                            <td>25</td>
+                            <td>음악 장르 정보</td>
+                        </tr>
+                        <tr>
+                            <td>invoices</td>
+                            <td>412</td>
+                            <td>판매 청구서 정보</td>
+                        </tr>
+                        <tr>
+                            <td>invoice_items</td>
+                            <td>2,240</td>
+                            <td>청구서 항목 상세 정보</td>
+                        </tr>
+                        <tr>
+                            <td>media_types</td>
+                            <td>5</td>
+                            <td>미디어 유형 정보</td>
+                        </tr>
+                        <tr>
+                            <td>playlists</td>
+                            <td>18</td>
+                            <td>재생 목록 정보</td>
+                        </tr>
+                        <tr>
+                            <td>playlist_track</td>
+                            <td>8,715</td>
+                            <td>재생 목록과 트랙 간의 연결 정보</td>
+                        </tr>
+                        <tr>
+                            <td>tracks</td>
+                            <td>3,503</td>
+                            <td>음악 트랙 정보</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="chart-container">
+                    <canvas id="recordsChart"></canvas>
+                </div>
+            </section>
+
+            <section id="analysis">
+                <h2>데이터 분석</h2>
+                
+                <article id="artists">
+                    <h3>아티스트와 앨범</h3>
+                    <p>데이터베이스에는 총 275명의 아티스트와 347개의 앨범이 등록되어 있습니다. 가장 많은 앨범을 보유한 상위 5개 아티스트는 다음과 같습니다:</p>
+                    <ol>
+                        <li>Iron Maiden: 21개 앨범</li>
+                        <li>Led Zeppelin: 14개 앨범</li>
+                        <li>Deep Purple: 11개 앨범</li>
+                        <li>Metallica: 10개 앨범</li>
+                        <li>U2: 10개 앨범</li>
+                    </ol>
+                    <div class="chart-container">
+                        <canvas id="artistsChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="genres">
+                    <h3>장르별</h3>
+                    <p>데이터베이스에는 총 25개의 장르가 있으며, 가장 많은 트랙을 보유한 상위 5개 장르는 다음과 같습니다:</p>
+                    <ol>
+                        <li>Rock: 1,297곡</li>
+                        <li>Latin: 579곡</li>
+                        <li>Metal: 374곡</li>
+                        <li>Alternative &amp; Punk: 332곡</li>
+                        <li>Jazz: 130곡</li>
+                    </ol>
+                    <p>이 정보를 통해 Chinook 음악 스토어는 록과 라틴 음악에 강한 캐털로그를 보유하고 있음을 알 수 있습니다.</p>
+                    <div class="chart-container">
+                        <canvas id="genresChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="sales">
+                    <h3>매출 분석</h3>
+                    <p>총 매출은 $2,328.60입니다. 국가별 매출 상위 5개국은 다음과 같습니다:</p>
+                    <ol>
+                        <li>미국: $523.06 (91건)</li>
+                        <li>캐나다: $303.96 (56건)</li>
+                        <li>프랑스: $195.10 (35건)</li>
+                        <li>브라질: $190.10 (35건)</li>
+                        <li>독일: $156.48 (28건)</li>
+                    </ol>
+                    <p>이 정보를 통해 미국, 캐나다, 유럽의 일부 국가가 주요 매출 시장임을 알 수 있습니다.</p>
+                    <div class="chart-container">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </article>
+
+                <article id="popular-tracks">
+                    <h3>인기 트랙</h3>
+                    <p>가장 많이 판매된 트랙들은 모두 2회씩 판매되었으며, 그 중 일부는 다음과 같습니다:</p>
+                    <ul>
+                        <li>Balls to the Wall</li>
+                        <li>Inject The Venom</li>
+                        <li>Snowballed</li>
+                        <li>Overdose</li>
+                        <li>Deuces Are Wild</li>
+                    </ul>
+                    <p>이 정보는 트랙 판매가 비교적 고르게 분포되어 있음을 시사합니다.</p>
+                </article>
+
+                <article id="playlists">
+                    <h3>재생 목록</h3>
+                    <p>가장 많은 트랙을 포함한 재생 목록은 다음과 같습니다:</p>
+                    <ol>
+                        <li>Music: 3,290곡</li>
+                        <li>90's Music: 1,477곡</li>
+                        <li>TV Shows: 213곡</li>
+                        <li>Classical: 75곡</li>
+                        <li>Brazilian Music: 39곡</li>
+                    </ol>
+                    <div class="chart-container">
+                        <canvas id="playlistsChart"></canvas>
+                    </div>
+                </article>
+            </section>
+
+            <section id="conclusion">
+                <h2>결론</h2>
+                <p>Chinook 데이터베이스는 음악 판매 관리를 위한 종합적인 시스템을 나타냅니다. 데이터 분석 결과, 록과 메탈 음악이 주요 카테고리이며, 북미와 유럽이 주요 시장임을 알 수 있습니다. 또한 다양한 재생 목록과 장르가 제공되어 사용자에게 다양한 음악 경험을 제공하고 있습니다.</p>
+                <p>데이터베이스 구조는 아티스트, 앨범, 트랙, 고객, 청구서 간의 관계를 효과적으로 관리하고 있으며, 디지털 음악 상점의 운영을 위한 완전한 데이터 모델을 제공합니다.</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Chinook 데이터베이스 분석 리포트 - 2025년 5월 17일</p>
+        </footer>
+    </div>
+
+    <script>
+        // 테이블별 레코드 수 차트
+        const recordsChart = new Chart(
+            document.getElementById('recordsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['playlist_track', 'tracks', 'invoice_items', 'albums', 'artists', 'invoices', 'customers', 'genres', 'playlists', 'employees', 'media_types'],
+                    datasets: [{
+                        label: '레코드 수',
+                        data: [8715, 3503, 2240, 347, 275, 412, 59, 25, 18, 8, 5],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '테이블별 레코드 수'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 아티스트별 앨범 수 차트
+        const artistsChart = new Chart(
+            document.getElementById('artistsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Iron Maiden', 'Led Zeppelin', 'Deep Purple', 'Metallica', 'U2'],
+                    datasets: [{
+                        label: '앨범 수',
+                        data: [21, 14, 11, 10, 10],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 206, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(153, 102, 255)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '앨범 수가 가장 많은 아티스트 Top 5'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+
+        // 장르별 트랙 수 차트
+        const genresChart = new Chart(
+            document.getElementById('genresChart'),
+            {
+                type: 'pie',
+                data: {
+                    labels: ['Rock', 'Latin', 'Metal', 'Alternative & Punk', 'Jazz', '기타'],
+                    datasets: [{
+                        label: '트랙 수',
+                        data: [1297, 579, 374, 332, 130, 791],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(201, 203, 207, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '장르별 트랙 수'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 국가별 매출 차트
+        const salesChart = new Chart(
+            document.getElementById('salesChart'),
+            {
+                type: 'doughnut',
+                data: {
+                    labels: ['미국', '캐나다', '프랑스', '브라질', '독일', '기타'],
+                    datasets: [{
+                        label: '매출($)',
+                        data: [523.06, 303.96, 195.10, 190.10, 156.48, 959.90],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(201, 203, 207, 0.7)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: '국가별 매출'
+                        }
+                    }
+                }
+            }
+        );
+
+        // 재생 목록별 트랙 수 차트
+        const playlistsChart = new Chart(
+            document.getElementById('playlistsChart'),
+            {
+                type: 'bar',
+                data: {
+                    labels: ['Music', '90\'s Music', 'TV Shows', 'Classical', 'Brazilian Music'],
+                    datasets: [{
+                        label: '트랙 수',
+                        data: [3290, 1477, 213, 75, 39],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: '가장 많은 트랙을 가진 재생 목록 Top 5'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+    </script>
+</body>
+</html>
