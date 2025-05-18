@@ -1,8 +1,9 @@
 package com.example.chinook.dto;
 
+import java.util.List;
 import java.util.Objects;
 
-public record CustomerDto(
+public record CustomerDetailDto(
     Long id,
     String firstName,
     String lastName,
@@ -15,12 +16,14 @@ public record CustomerDto(
     String phone,
     String fax,
     String email,
-    EmployeeDto supportRep
+    EmployeeDto supportRep,
+    List<InvoiceDto> invoices
 ) {
-    public CustomerDto {
+    public CustomerDetailDto {
         Objects.requireNonNull(firstName, "이름은 null일 수 없습니다.");
         Objects.requireNonNull(lastName, "성은 null일 수 없습니다.");
         Objects.requireNonNull(email, "이메일은 null일 수 없습니다.");
+        Objects.requireNonNull(invoices, "청구서 목록은 null일 수 없습니다.");
         
         if (firstName.isBlank()) {
             throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
