@@ -35,11 +35,11 @@ Sakila API Server는 영화 대여점 관리 시스템을 위한 RESTful API를 
 git clone https://your-repository-url/sakila-server.git
 cd sakila-server
 
-# 프로젝트 빌드
-./mvnw clean install
+# 프로젝트 빌드 (Windows)
+mvnw.cmd clean install
 
-# 애플리케이션 실행
-./mvnw spring-boot:run
+# 애플리케이션 실행 (Windows)
+mvnw.cmd spring-boot:run
 ```
 
 #### Maven 사용

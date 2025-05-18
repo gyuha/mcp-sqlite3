@@ -1,5 +1,6 @@
 package com.sakila.server.service;
 
+import com.sakila.server.exception.ResourceNotFoundException;
 import com.sakila.server.model.Film;
 import com.sakila.server.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +19,9 @@ public class FilmService {
         return filmRepository.findAll();
     }
 
-    public Optional<Film> getFilmById(Integer id) {
-        return filmRepository.findById(id);
+    public Film getFilmById(Integer id) {
+        return filmRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Film", "id", id));
     }
 
     public List<Film> getFilmsByReleaseYear(Integer year) {

@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
-import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -13,11 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-public class DateTimeConfig extends AbstractJdbcConfiguration {
+public class DateTimeConfig {
 
-    @Override
     @Bean
-    public List<Converter<?, ?>> jdbcConverters() {
+    public List<Converter<?, ?>> converters() {
         return Arrays.asList(
             new TimestampToLocalDateTimeConverter(),
             new LocalDateTimeToTimestampConverter()

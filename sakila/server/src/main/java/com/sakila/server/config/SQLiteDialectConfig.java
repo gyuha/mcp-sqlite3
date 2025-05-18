@@ -1,8 +1,8 @@
 package com.sakila.server.config;
 
+import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
-import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
-import org.hibernate.type.descriptor.sql.internal.CapacityDependentTypeDescriptor;
+import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 import org.hibernate.community.dialect.SQLiteDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,19 +17,10 @@ public class SQLiteDialectConfig {
             public IdentityColumnSupport getIdentityColumnSupport() {
                 return new SQLiteIdentityColumnSupport();
             }
-            
-            @Override
-            protected SqlTypeDescriptor getSqlTypeDescriptorOverride(int sqlCode) {
-                SqlTypeDescriptor descriptor = super.getSqlTypeDescriptorOverride(sqlCode);
-                if (descriptor instanceof CapacityDependentTypeDescriptor) {
-                    return descriptor;
-                }
-                return null;
-            }
         };
     }
     
-    public static class SQLiteIdentityColumnSupport implements IdentityColumnSupport {
+    public static class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
         @Override
         public boolean supportsIdentityColumns() {
             return true;
@@ -48,11 +39,6 @@ public class SQLiteDialectConfig {
         @Override
         public boolean supportsInsertSelectIdentity() {
             return false;
-        }
-
-        @Override
-        public boolean isIdentityColumn(String primaryKey, String columnName) {
-            return columnName != null && columnName.endsWith("_id");
         }
     }
 }

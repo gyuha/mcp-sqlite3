@@ -23,9 +23,7 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getFilmById(@PathVariable Integer id) {
-        return filmService.getFilmById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(filmService.getFilmById(id));
     }
 
     @GetMapping("/year/{year}")

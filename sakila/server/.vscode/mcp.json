@@ -9,7 +9,7 @@
       "command": "npx",
       "args": ["-y", "mcp-shrimp-task-manager"],
       "env": {
-        "DATA_DIR": "${workspaceFolder}/task-data",
+        "DATA_DIR": "D:/workspace/mcp-sqlite3/sakila/server/task-data",
         "TEMPLATES_USE": "ko",
         "ENABLE_GUI": "true"
       }
