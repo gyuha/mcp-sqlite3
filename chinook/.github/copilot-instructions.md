@@ -14,6 +14,7 @@ D:\workspace\mcp-sqlite3\chinook 폴더에 작성 해 줘
 - 작업전에 shrimp-task-manager를 사용해서 plan을 작성 해 줘
 - 데이터베이스는 분석 및 확인은 database client mcp의 "Excute Query" 기능을 사용 해 줘
 - 데이터베이스는 chinook.db를 사용 해 줘
+- api는 swagger를 사용 해 줘
 - chinook.md 파일을 참고 해서 이 **사이트에 필요한 API를 만들어 줘**
 
 
