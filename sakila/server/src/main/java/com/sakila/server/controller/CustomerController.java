@@ -23,9 +23,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {
-        return customerService.getCustomerById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
     @GetMapping("/lastName/{lastName}")
@@ -50,21 +48,17 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
-        return customerService.getCustomerById(id)
-                .map(existingCustomer -> {
-                    customer.setCustomerId(id);
-                    return ResponseEntity.ok(customerService.saveCustomer(customer));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        // 아이디로 고객을 찾고, 없으면 ResourceNotFoundException이 발생합니다
+        customerService.getCustomerById(id);
+        customer.setCustomerId(id);
+        return ResponseEntity.ok(customerService.saveCustomer(customer));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer id) {
-        return customerService.getCustomerById(id)
-                .map(customer -> {
-                    customerService.deleteCustomer(id);
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        // 아이디로 고객을 찾고, 없으면 ResourceNotFoundException이 발생합니다
+        customerService.getCustomerById(id);
+        customerService.deleteCustomer(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

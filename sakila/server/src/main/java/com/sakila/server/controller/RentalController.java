@@ -3,6 +3,10 @@ package com.sakila.server.controller;
 import com.sakila.server.model.Rental;
 import com.sakila.server.service.RentalService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -19,8 +25,25 @@ public class RentalController {
     private final RentalService rentalService;
 
     @GetMapping
-    public ResponseEntity<List<Rental>> getAllRentals() {
-        return ResponseEntity.ok(rentalService.getAllRentals());
+    public ResponseEntity<Map<String, Object>> getAllRentals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "rentalId") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? 
+                Sort.Direction.ASC : Sort.Direction.DESC;
+        
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        Page<Rental> rentalsPage = rentalService.getAllRentalsPaged(pageable);
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("rentals", rentalsPage.getContent());
+        response.put("currentPage", rentalsPage.getNumber());
+        response.put("totalItems", rentalsPage.getTotalElements());
+        response.put("totalPages", rentalsPage.getTotalPages());
+        
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

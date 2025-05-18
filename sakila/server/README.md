@@ -9,6 +9,9 @@ Sakila API Server는 영화 대여점 관리 시스템을 위한 RESTful API를 
 - 고객 정보 관리 (조회, 추가, 수정, 삭제)
 - 대여 정보 관리 (조회, 추가, 수정, 삭제)
 - 결제 정보 관리 (조회, 추가, 수정, 삭제)
+- 페이지네이션 및 정렬 기능
+- 제목 검색 기능
+- 오류 처리 및 예외 처리
 - Swagger UI를 통한 API 문서화
 
 ## 기술 스택
@@ -73,6 +76,11 @@ mvn spring-boot:run
 - `GET /api/films/year/{year}`: 특정 연도의 영화 조회
 - `GET /api/films/rating/{rating}`: 특정 등급의 영화 조회
 - `GET /api/films/language/{languageId}`: 특정 언어의 영화 조회
+- `GET /api/films/paged`: 페이지네이션 및 정렬을 지원하는 영화 조회
+- `GET /api/films/search`: 제목으로 영화 검색
+- `GET /api/films/year/{year}/paged`: 페이지네이션을 지원하는 연도별 영화 조회
+- `GET /api/films/rating/{rating}/paged`: 페이지네이션을 지원하는 등급별 영화 조회
+- `GET /api/films/language/{languageId}/paged`: 페이지네이션을 지원하는 언어별 영화 조회
 - `POST /api/films`: 새 영화 추가
 - `PUT /api/films/{id}`: 영화 정보 업데이트
 - `DELETE /api/films/{id}`: 영화 삭제
@@ -109,6 +117,38 @@ mvn spring-boot:run
 - `PUT /api/payments/{id}`: 결제 정보 업데이트
 - `DELETE /api/payments/{id}`: 결제 삭제
 
+## 예외 처리
+
+애플리케이션은 다음과 같은 예외 처리 메커니즘을 제공합니다:
+
+- **ResourceNotFoundException**: 요청한 리소스(영화, 고객 등)를 찾을 수 없을 때 발생
+- **MethodArgumentNotValidException**: 요청 데이터의 유효성 검증에 실패했을 때 발생
+- **기타 예외**: 서버 내부 오류 등
+
+모든 예외는 표준화된 JSON 응답으로 변환되어 클라이언트에게 전달됩니다:
+```json
+{
+  "message": "에러 메시지",
+  "details": "상세 설명",
+  "status": 404,
+  "timestamp": "2025-05-18 22:30:45"
+}
+```
+
+## 페이지네이션 및 정렬
+
+페이지네이션을 지원하는 API 엔드포인트는 다음과 같은 공통 파라미터를 사용합니다:
+
+- `page`: 페이지 번호 (0부터 시작, 기본값: 0)
+- `size`: 페이지 크기 (기본값: 10)
+- `sortBy`: 정렬 기준 필드 (기본값: 엔티티의 기본 ID)
+- `sortDir`: 정렬 방향 ('asc' 또는 'desc', 기본값: 'asc')
+
+예시:
+```
+GET /api/films/paged?page=0&size=20&sortBy=title&sortDir=desc
+```
+
 ## API 문서화
 
 애플리케이션이 실행되면 Swagger UI를 통해 API 문서에 접근할 수 있습니다.
@@ -125,6 +165,7 @@ src/
 │   │           └── server/
 │   │               ├── config/          # 설정 클래스
 │   │               ├── controller/      # REST 컨트롤러
+│   │               ├── exception/       # 예외 처리 클래스
 │   │               ├── model/           # 엔티티 클래스
 │   │               ├── repository/      # JPA 레포지토리
 │   │               ├── service/         # 비즈니스 로직

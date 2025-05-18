@@ -3,6 +3,8 @@ package com.sakila.server.service;
 import com.sakila.server.model.Rental;
 import com.sakila.server.repository.RentalRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,10 @@ public class RentalService {
 
     public List<Rental> getAllRentals() {
         return rentalRepository.findAll();
+    }
+    
+    public Page<Rental> getAllRentalsPaged(Pageable pageable) {
+        return rentalRepository.findAll(pageable);
     }
 
     public Optional<Rental> getRentalById(Integer id) {

@@ -1,5 +1,6 @@
 package com.sakila.server.service;
 
+import com.sakila.server.exception.ResourceNotFoundException;
 import com.sakila.server.model.Customer;
 import com.sakila.server.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +19,9 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomerById(Integer id) {
-        return customerRepository.findById(id);
+    public Customer getCustomerById(Integer id) {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
     }
 
     public List<Customer> getCustomersByLastName(String lastName) {
