@@ -1,0 +1,217 @@
+{
+  "tasks": [
+    {
+      "id": "6c8113a6-c819-4cd5-87a8-d49fb8352413",
+      "name": "Spring Boot 프로젝트 초기화 및 SQLite 연결 설정",
+      "description": "Spring Boot 3 프로젝트를 초기화하고 SQLite 데이터베이스 연결을 설정합니다. 필요한 의존성을 추가하고 application.properties/yml 파일을 구성합니다.",
+      "notes": "Spring Boot 3와 SQLite 간의 호환성 이슈가 있을 수 있으므로 적절한 설정 필요",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:21:12.064Z",
+      "relatedFiles": [
+        {
+          "path": "build.gradle",
+          "type": "CREATE",
+          "description": "Gradle 빌드 스크립트",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/main/resources/application.yml",
+          "type": "CREATE",
+          "description": "애플리케이션 설정 파일",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/ChinookApplication.java",
+          "type": "CREATE",
+          "description": "메인 애플리케이션 클래스",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "1. Spring Initializer를 사용하여 Spring Boot 3 프로젝트 생성(Java 17, Gradle)\n2. 필요한 의존성 추가: Spring Web, Spring Data JPA, Lombok, SQLite JDBC Driver\n3. application.yml 파일 구성 - SQLite 데이터베이스 연결 설정\n4. 기본 패키지 구조 생성: controller, service, repository, entity, dto, exception\n5. SQLite 데이터베이스 방언 설정(필요한 경우)\n6. 기본 애플리케이션 클래스 생성 및 테스트",
+      "verificationCriteria": "1. 프로젝트가 성공적으로 컴파일되고 실행됨\n2. SQLite 데이터베이스에 성공적으로 연결됨\n3. 기본 패키지 구조가 올바르게 생성됨\n4. 로그에 오류가 없음",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "Spring Boot 프로젝트 초기화와 SQLite 연결 설정을 위한 모든 필수 파일이 제공되었습니다. build.gradle에 필요한 의존성을 포함시키고, application.yml에 SQLite 연결 설정을 구성했으며, 필요한 패키지 구조와 메인 애플리케이션 클래스를 생성했습니다.",
+      "completedAt": "2025-05-18T14:21:12.056Z"
+    },
+    {
+      "id": "2eff7dc6-c242-4e22-9d06-5436045ef364",
+      "name": "엔티티 클래스 모델링",
+      "description": "Chinook 데이터베이스의 테이블 구조에 맞는 엔티티 클래스를 생성합니다. 주요 테이블(artists, albums, tracks, playlists, customers, invoices 등)에 대한 엔티티와 관계를 정의합니다.",
+      "notes": "SQLite와 JPA 간의 호환성 문제(예: 데이터 타입 매핑)를 고려해야 함",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "6c8113a6-c819-4cd5-87a8-d49fb8352413"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:24:19.641Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/entity/Artist.java",
+          "type": "CREATE",
+          "description": "Artist 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Album.java",
+          "type": "CREATE",
+          "description": "Album 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Track.java",
+          "type": "CREATE",
+          "description": "Track 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Playlist.java",
+          "type": "CREATE",
+          "description": "Playlist 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Customer.java",
+          "type": "CREATE",
+          "description": "Customer 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 45
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Invoice.java",
+          "type": "CREATE",
+          "description": "Invoice 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/InvoiceItem.java",
+          "type": "CREATE",
+          "description": "InvoiceItem 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/PlaylistTrack.java",
+          "type": "CREATE",
+          "description": "PlaylistTrack 조인 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Genre.java",
+          "type": "CREATE",
+          "description": "Genre 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/MediaType.java",
+          "type": "CREATE",
+          "description": "MediaType 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 25
+        }
+      ],
+      "implementationGuide": "1. 각 테이블에 대응하는 엔티티 클래스 생성\n2. @Entity, @Table, @Id, @Column 등의 JPA 애노테이션을 사용하여 매핑 정의\n3. 엔티티 간 관계 설정(@OneToMany, @ManyToOne, @ManyToMany 등)\n4. 필요한 생성자, 게터/세터, 유틸리티 메서드 구현\n5. Lombok 사용하여 보일러플레이트 코드 최소화(@Data, @Builder 등)\n6. 각 엔티티의 equals(), hashCode(), toString() 메서드 오버라이드",
+      "verificationCriteria": "1. 모든 엔티티 클래스가 올바르게 정의됨\n2. JPA 애노테이션을 사용하여 테이블과 컬럼이 정확히 매핑됨\n3. 엔티티 간 관계가 올바르게 정의됨\n4. Lombok 애노테이션이 적절히 사용됨\n5. SQLite 데이터 타입과 Java 타입이 호환됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "모든 테이블에 대응하는 엔티티 클래스가 성공적으로 생성되었습니다. JPA 애노테이션을 사용하여 테이블과 컬럼을 정확히 매핑했으며, 엔티티 간 관계(OneToMany, ManyToOne, ManyToMany)를 적절히 정의했습니다. Lombok을 활용하여 보일러플레이트 코드를 최소화했고, 양방향 관계 설정을 통해 데이터 접근이 편리하도록 구현했습니다.",
+      "completedAt": "2025-05-18T14:24:19.635Z"
+    },
+    {
+      "id": "adcb639f-a062-44bc-94d4-15a331387c57",
+      "name": "Repository 인터페이스 구현",
+      "description": "각 엔티티에 대한 Repository 인터페이스를 생성합니다. Spring Data JPA의 기능을 활용하여 기본 CRUD 작업과 필요한 커스텀 쿼리 메서드를 정의합니다.",
+      "notes": "복잡한 쿼리의 경우 성능 최적화 고려 필요",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "2eff7dc6-c242-4e22-9d06-5436045ef364"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:25:47.244Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/repository/ArtistRepository.java",
+          "type": "CREATE",
+          "description": "Artist 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/AlbumRepository.java",
+          "type": "CREATE",
+          "description": "Album 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/TrackRepository.java",
+          "type": "CREATE",
+          "description": "Track 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/PlaylistRepository.java",
+          "type": "CREATE",
+          "description": "Playlist 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/CustomerRepository.java",
+          "type": "CREATE",
+          "description": "Customer 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/InvoiceRepository.java",
+          "type": "CREATE",
+          "description": "Invoice 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/InvoiceItemRepository.java",
+          "type": "CREATE",
+          "description": "InvoiceItem 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/GenreRepository.java",
+          "type": "CREATE",
+          "description": "Genre 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 15
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/MediaTypeRepository.java",
+          "type": "CREATE",
+          "description": "MediaType 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "1. 각 엔티티에 대한 Repository 인터페이스 생성 및 JpaRepository 확장\n2. 필요한 커스텀 쿼리 메서드 정의(@Query 애노테이션 활용)\n3. 페이징 및 정렬 기능을 위한 메서드 구현\n4. 네이티브 쿼리가 필요한 경우 적절히 정의\n5. 필요한 경우 QueryDSL이나 Specification을 활용한 동적 쿼리 설정",
+      "verificationCriteria": "1. 모든 엔티티에 대한 Repository 인터페이스가 올바르게 생성됨\n2. 기본 CRUD 작업이 잘 작동함\n3. 필요한 커스텀 쿼리 메서드가 잘 정의되고 작동함\n4. 페이징 및 정렬 기능이 잘 작동함\n5. 쿼리 성능이 적절함",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "모든 엔티티에 대한 Repository 인터페이스를 성공적으로 구현했습니다. JpaRepository를 확장하여 기본 CRUD 기능을 제공하고, 페이징과 정렬이 가능한 쿼리 메서드를 추가했습니다. 데이터 검색, 집계, 필터링을 위한 다양한 커스텀 메서드를 JPQL과 네이티브 쿼리를 활용하여 효율적으로 구현하였습니다. 각 Repository는 해당 도메인의 비즈니스 요구사항을 충족할 수 있는 풍부한 기능을 제공합니다.",
+      "completedAt": "2025-05-18T14:25:47.238Z"
+    }
+  ]
+}
