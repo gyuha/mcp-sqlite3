@@ -1,0 +1,674 @@
+{
+  "tasks": [
+    {
+      "id": "6c8113a6-c819-4cd5-87a8-d49fb8352413",
+      "name": "Spring Boot 프로젝트 초기화 및 SQLite 연결 설정",
+      "description": "Spring Boot 3 프로젝트를 초기화하고 SQLite 데이터베이스 연결을 설정합니다. 필요한 의존성을 추가하고 application.properties/yml 파일을 구성합니다.",
+      "notes": "Spring Boot 3와 SQLite 간의 호환성 이슈가 있을 수 있으므로 적절한 설정 필요",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:21:12.064Z",
+      "relatedFiles": [
+        {
+          "path": "build.gradle",
+          "type": "CREATE",
+          "description": "Gradle 빌드 스크립트",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/main/resources/application.yml",
+          "type": "CREATE",
+          "description": "애플리케이션 설정 파일",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/ChinookApplication.java",
+          "type": "CREATE",
+          "description": "메인 애플리케이션 클래스",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "1. Spring Initializer를 사용하여 Spring Boot 3 프로젝트 생성(Java 17, Gradle)\n2. 필요한 의존성 추가: Spring Web, Spring Data JPA, Lombok, SQLite JDBC Driver\n3. application.yml 파일 구성 - SQLite 데이터베이스 연결 설정\n4. 기본 패키지 구조 생성: controller, service, repository, entity, dto, exception\n5. SQLite 데이터베이스 방언 설정(필요한 경우)\n6. 기본 애플리케이션 클래스 생성 및 테스트",
+      "verificationCriteria": "1. 프로젝트가 성공적으로 컴파일되고 실행됨\n2. SQLite 데이터베이스에 성공적으로 연결됨\n3. 기본 패키지 구조가 올바르게 생성됨\n4. 로그에 오류가 없음",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "Spring Boot 프로젝트 초기화와 SQLite 연결 설정을 위한 모든 필수 파일이 제공되었습니다. build.gradle에 필요한 의존성을 포함시키고, application.yml에 SQLite 연결 설정을 구성했으며, 필요한 패키지 구조와 메인 애플리케이션 클래스를 생성했습니다.",
+      "completedAt": "2025-05-18T14:21:12.056Z"
+    },
+    {
+      "id": "2eff7dc6-c242-4e22-9d06-5436045ef364",
+      "name": "엔티티 클래스 모델링",
+      "description": "Chinook 데이터베이스의 테이블 구조에 맞는 엔티티 클래스를 생성합니다. 주요 테이블(artists, albums, tracks, playlists, customers, invoices 등)에 대한 엔티티와 관계를 정의합니다.",
+      "notes": "SQLite와 JPA 간의 호환성 문제(예: 데이터 타입 매핑)를 고려해야 함",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "6c8113a6-c819-4cd5-87a8-d49fb8352413"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:24:19.641Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/entity/Artist.java",
+          "type": "CREATE",
+          "description": "Artist 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Album.java",
+          "type": "CREATE",
+          "description": "Album 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Track.java",
+          "type": "CREATE",
+          "description": "Track 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Playlist.java",
+          "type": "CREATE",
+          "description": "Playlist 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Customer.java",
+          "type": "CREATE",
+          "description": "Customer 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 45
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Invoice.java",
+          "type": "CREATE",
+          "description": "Invoice 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/InvoiceItem.java",
+          "type": "CREATE",
+          "description": "InvoiceItem 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/PlaylistTrack.java",
+          "type": "CREATE",
+          "description": "PlaylistTrack 조인 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/Genre.java",
+          "type": "CREATE",
+          "description": "Genre 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/entity/MediaType.java",
+          "type": "CREATE",
+          "description": "MediaType 엔티티 클래스",
+          "lineStart": 1,
+          "lineEnd": 25
+        }
+      ],
+      "implementationGuide": "1. 각 테이블에 대응하는 엔티티 클래스 생성\n2. @Entity, @Table, @Id, @Column 등의 JPA 애노테이션을 사용하여 매핑 정의\n3. 엔티티 간 관계 설정(@OneToMany, @ManyToOne, @ManyToMany 등)\n4. 필요한 생성자, 게터/세터, 유틸리티 메서드 구현\n5. Lombok 사용하여 보일러플레이트 코드 최소화(@Data, @Builder 등)\n6. 각 엔티티의 equals(), hashCode(), toString() 메서드 오버라이드",
+      "verificationCriteria": "1. 모든 엔티티 클래스가 올바르게 정의됨\n2. JPA 애노테이션을 사용하여 테이블과 컬럼이 정확히 매핑됨\n3. 엔티티 간 관계가 올바르게 정의됨\n4. Lombok 애노테이션이 적절히 사용됨\n5. SQLite 데이터 타입과 Java 타입이 호환됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "모든 테이블에 대응하는 엔티티 클래스가 성공적으로 생성되었습니다. JPA 애노테이션을 사용하여 테이블과 컬럼을 정확히 매핑했으며, 엔티티 간 관계(OneToMany, ManyToOne, ManyToMany)를 적절히 정의했습니다. Lombok을 활용하여 보일러플레이트 코드를 최소화했고, 양방향 관계 설정을 통해 데이터 접근이 편리하도록 구현했습니다.",
+      "completedAt": "2025-05-18T14:24:19.635Z"
+    },
+    {
+      "id": "adcb639f-a062-44bc-94d4-15a331387c57",
+      "name": "Repository 인터페이스 구현",
+      "description": "각 엔티티에 대한 Repository 인터페이스를 생성합니다. Spring Data JPA의 기능을 활용하여 기본 CRUD 작업과 필요한 커스텀 쿼리 메서드를 정의합니다.",
+      "notes": "복잡한 쿼리의 경우 성능 최적화 고려 필요",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "2eff7dc6-c242-4e22-9d06-5436045ef364"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:25:47.244Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/repository/ArtistRepository.java",
+          "type": "CREATE",
+          "description": "Artist 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/AlbumRepository.java",
+          "type": "CREATE",
+          "description": "Album 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/TrackRepository.java",
+          "type": "CREATE",
+          "description": "Track 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/PlaylistRepository.java",
+          "type": "CREATE",
+          "description": "Playlist 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/CustomerRepository.java",
+          "type": "CREATE",
+          "description": "Customer 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/InvoiceRepository.java",
+          "type": "CREATE",
+          "description": "Invoice 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/InvoiceItemRepository.java",
+          "type": "CREATE",
+          "description": "InvoiceItem 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/GenreRepository.java",
+          "type": "CREATE",
+          "description": "Genre 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 15
+        },
+        {
+          "path": "src/main/java/com/example/chinook/repository/MediaTypeRepository.java",
+          "type": "CREATE",
+          "description": "MediaType 엔티티 레포지토리",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "1. 각 엔티티에 대한 Repository 인터페이스 생성 및 JpaRepository 확장\n2. 필요한 커스텀 쿼리 메서드 정의(@Query 애노테이션 활용)\n3. 페이징 및 정렬 기능을 위한 메서드 구현\n4. 네이티브 쿼리가 필요한 경우 적절히 정의\n5. 필요한 경우 QueryDSL이나 Specification을 활용한 동적 쿼리 설정",
+      "verificationCriteria": "1. 모든 엔티티에 대한 Repository 인터페이스가 올바르게 생성됨\n2. 기본 CRUD 작업이 잘 작동함\n3. 필요한 커스텀 쿼리 메서드가 잘 정의되고 작동함\n4. 페이징 및 정렬 기능이 잘 작동함\n5. 쿼리 성능이 적절함",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다.",
+      "summary": "모든 엔티티에 대한 Repository 인터페이스를 성공적으로 구현했습니다. JpaRepository를 확장하여 기본 CRUD 기능을 제공하고, 페이징과 정렬이 가능한 쿼리 메서드를 추가했습니다. 데이터 검색, 집계, 필터링을 위한 다양한 커스텀 메서드를 JPQL과 네이티브 쿼리를 활용하여 효율적으로 구현하였습니다. 각 Repository는 해당 도메인의 비즈니스 요구사항을 충족할 수 있는 풍부한 기능을 제공합니다.",
+      "completedAt": "2025-05-18T14:25:47.238Z"
+    },
+    {
+      "id": "079ccb57-3807-436c-812e-832f235c68ef",
+      "name": "DTO 클래스 구현",
+      "description": "API 요청/응답에 사용할 DTO(Data Transfer Object) 클래스를 구현합니다. Java 17의 record 타입을 사용하고, 입력 유효성 검증 로직을 추가합니다.",
+      "notes": "DTO는 API 컨트랙트의 일부이므로 버전 관리 및 하위 호환성 고려 필요",
+      "status": "進行中",
+      "dependencies": [
+        {
+          "taskId": "2eff7dc6-c242-4e22-9d06-5436045ef364"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:26:07.074Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/dto/ArtistDto.java",
+          "type": "CREATE",
+          "description": "Artist 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/AlbumDto.java",
+          "type": "CREATE",
+          "description": "Album 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/TrackDto.java",
+          "type": "CREATE",
+          "description": "Track 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 45
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/PlaylistDto.java",
+          "type": "CREATE",
+          "description": "Playlist 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/CustomerDto.java",
+          "type": "CREATE",
+          "description": "Customer 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 45
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/InvoiceDto.java",
+          "type": "CREATE",
+          "description": "Invoice 관련 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/ResponseDto.java",
+          "type": "CREATE",
+          "description": "표준 응답 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/PageResponseDto.java",
+          "type": "CREATE",
+          "description": "페이징 응답 DTO 클래스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/mapper/DtoMapper.java",
+          "type": "CREATE",
+          "description": "DTO-엔티티 변환 유틸리티",
+          "lineStart": 1,
+          "lineEnd": 100
+        }
+      ],
+      "implementationGuide": "1. 각 엔티티에 대한 요청/응답 DTO 클래스를 record 타입으로 정의\n2. 표준화된 응답 DTO 구조 설계(성공/실패 응답, 페이징 정보 등)\n3. Bean Validation 애노테이션을 사용한 입력 데이터 유효성 검증 로직 추가\n4. DTO와 엔티티 간 변환 유틸리티 메서드 구현\n5. 필요한 경우 중첩된 DTO 구조 정의\n6. 다양한 응답 케이스에 대한 DTO 변형 구현",
+      "verificationCriteria": "1. 모든 필요한 DTO 클래스가 record 타입으로 올바르게 구현됨\n2. Bean Validation을 통한 입력 데이터 유효성 검증이 잘 작동함\n3. DTO와 엔티티 간 변환이 원활히 이루어짐\n4. API 응답 구조가 일관성 있게 설계됨\n5. DTO 클래스가 적절히 문서화됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "2d63ea2b-3e0d-407b-9b27-bffb61ef4f49",
+      "name": "Service 인터페이스와 구현 클래스",
+      "description": "각 도메인 영역에 대한 비즈니스 로직을 캡슐화하는 Service 인터페이스와 구현 클래스를 개발합니다. 트랜잭션 관리와 데이터 변환 로직을 구현합니다.",
+      "notes": "비즈니스 로직과 데이터 접근 로직을 명확히 분리하여 SOLID 원칙 준수",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "adcb639f-a062-44bc-94d4-15a331387c57"
+        },
+        {
+          "taskId": "079ccb57-3807-436c-812e-832f235c68ef"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/service/ArtistService.java",
+          "type": "CREATE",
+          "description": "Artist 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/ArtistServiceImpl.java",
+          "type": "CREATE",
+          "description": "Artist 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 60
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/AlbumService.java",
+          "type": "CREATE",
+          "description": "Album 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/AlbumServiceImpl.java",
+          "type": "CREATE",
+          "description": "Album 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 70
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/TrackService.java",
+          "type": "CREATE",
+          "description": "Track 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/TrackServiceImpl.java",
+          "type": "CREATE",
+          "description": "Track 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/PlaylistService.java",
+          "type": "CREATE",
+          "description": "Playlist 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/PlaylistServiceImpl.java",
+          "type": "CREATE",
+          "description": "Playlist 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 70
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/CustomerService.java",
+          "type": "CREATE",
+          "description": "Customer 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/CustomerServiceImpl.java",
+          "type": "CREATE",
+          "description": "Customer 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 70
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/InvoiceService.java",
+          "type": "CREATE",
+          "description": "Invoice 서비스 인터페이스",
+          "lineStart": 1,
+          "lineEnd": 25
+        },
+        {
+          "path": "src/main/java/com/example/chinook/service/impl/InvoiceServiceImpl.java",
+          "type": "CREATE",
+          "description": "Invoice 서비스 구현 클래스",
+          "lineStart": 1,
+          "lineEnd": 70
+        }
+      ],
+      "implementationGuide": "1. 각 도메인 영역에 대한 Service 인터페이스 정의(메서드 계약 설정)\n2. ServiceImpl 클래스에서 인터페이스 구현\n3. 필요한 Repository 의존성 주입\n4. 트랜잭션 관리 설정(@Transactional)\n5. 비즈니스 로직 및 데이터 검증 로직 구현\n6. DTO와 엔티티 간 변환 처리\n7. 예외 처리 및 로깅 구현",
+      "verificationCriteria": "1. 각 도메인 영역에 대한 Service 인터페이스와 구현 클래스가 올바르게 구현됨\n2. 트랜잭션이 적절히 관리됨\n3. 비즈니스 로직이 명확하게 캡슐화됨\n4. DTO와 엔티티 간 변환이 적절히 처리됨\n5. 예외가 적절히 처리되고 로깅됨\n6. SOLID 원칙이 준수됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "9e60ed61-8306-4bc0-b67c-5e9fab4491ad",
+      "name": "REST 컨트롤러 구현",
+      "description": "RESTful API 엔드포인트를 제공하는 Controller 클래스를 구현합니다. 각 도메인 영역별로 필요한 CRUD 작업과 추가 기능을 위한 API를 개발합니다.",
+      "notes": "RESTful API 설계 원칙 준수 및 적절한 HTTP 상태 코드 사용",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "2d63ea2b-3e0d-407b-9b27-bffb61ef4f49"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/controller/ArtistController.java",
+          "type": "CREATE",
+          "description": "Artist API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 70
+        },
+        {
+          "path": "src/main/java/com/example/chinook/controller/AlbumController.java",
+          "type": "CREATE",
+          "description": "Album API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/main/java/com/example/chinook/controller/TrackController.java",
+          "type": "CREATE",
+          "description": "Track API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 90
+        },
+        {
+          "path": "src/main/java/com/example/chinook/controller/PlaylistController.java",
+          "type": "CREATE",
+          "description": "Playlist API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/main/java/com/example/chinook/controller/CustomerController.java",
+          "type": "CREATE",
+          "description": "Customer API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/main/java/com/example/chinook/controller/InvoiceController.java",
+          "type": "CREATE",
+          "description": "Invoice API 컨트롤러",
+          "lineStart": 1,
+          "lineEnd": 80
+        }
+      ],
+      "implementationGuide": "1. 각 도메인 영역에 대한 RestController 클래스 생성\n2. 필요한 Service 의존성 주입\n3. CRUD 작업을 위한 엔드포인트 구현(GET, POST, PUT, DELETE)\n4. 요청 파라미터 및 경로 변수 처리\n5. 응답 상태 코드 및 헤더 설정\n6. API 페이징, 정렬, 필터링 구현\n7. API 문서화(@Tag, @Operation 등 Swagger/OpenAPI 애노테이션 활용)",
+      "verificationCriteria": "1. 모든 필요한 API 엔드포인트가 올바르게 구현됨\n2. RESTful API 설계 원칙이 준수됨\n3. HTTP 메서드와 상태 코드가 적절히 사용됨\n4. 페이징, 정렬, 필터링 기능이 잘 작동함\n5. API가 잘 문서화됨\n6. 요청 및 응답이 명확하고 일관성 있게 처리됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "f334ee9e-cdcc-45cf-b172-4aedddc8494b",
+      "name": "예외 처리 및 에러 핸들링 구현",
+      "description": "애플리케이션 전반의 예외 처리 및 에러 핸들링 메커니즘을 구현합니다. 글로벌 예외 핸들러, 사용자 정의 예외 클래스, 표준화된 에러 응답 형식을 개발합니다.",
+      "notes": "예외 처리는 보안 측면에서도 중요하므로 OWASP 가이드라인 준수",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "079ccb57-3807-436c-812e-832f235c68ef"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/exception/ResourceNotFoundException.java",
+          "type": "CREATE",
+          "description": "리소스 찾을 수 없음 예외",
+          "lineStart": 1,
+          "lineEnd": 15
+        },
+        {
+          "path": "src/main/java/com/example/chinook/exception/BadRequestException.java",
+          "type": "CREATE",
+          "description": "잘못된 요청 예외",
+          "lineStart": 1,
+          "lineEnd": 15
+        },
+        {
+          "path": "src/main/java/com/example/chinook/exception/ServiceException.java",
+          "type": "CREATE",
+          "description": "서비스 레이어 예외",
+          "lineStart": 1,
+          "lineEnd": 15
+        },
+        {
+          "path": "src/main/java/com/example/chinook/exception/GlobalExceptionHandler.java",
+          "type": "CREATE",
+          "description": "글로벌 예외 핸들러",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/main/java/com/example/chinook/dto/ErrorResponseDto.java",
+          "type": "CREATE",
+          "description": "에러 응답 DTO",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/resources/messages/error_messages.properties",
+          "type": "CREATE",
+          "description": "에러 메시지 리소스 파일",
+          "lineStart": 1,
+          "lineEnd": 50
+        }
+      ],
+      "implementationGuide": "1. 사용자 정의 예외 클래스 생성(비즈니스 예외, 데이터 예외 등)\n2. @ControllerAdvice/@RestControllerAdvice를 사용한 글로벌 예외 핸들러 구현\n3. 다양한 예외 유형에 대한 처리 로직 정의\n4. 표준화된 에러 응답 DTO 설계 및 구현\n5. 예외 로깅 메커니즘 구현\n6. 입력 유효성 검증 실패에 대한 처리\n7. 국제화(i18n) 지원을 위한 에러 메시지 관리",
+      "verificationCriteria": "1. 모든 예외가 적절히 처리됨\n2. 글로벌 예외 핸들러가 올바르게 구현됨\n3. 에러 응답이 일관된 형식으로 반환됨\n4. 입력 유효성 검증 실패가 적절히 처리됨\n5. 예외가 적절히 로깅됨\n6. 에러 메시지가 명확하고 정보를 적절히 제공함",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "7bd6ad0a-9faa-46ad-9cb2-fd980c8064e1",
+      "name": "설정 및 유틸리티 클래스 구현",
+      "description": "애플리케이션의 추가 설정과 유틸리티 클래스를 구현합니다. 데이터베이스 설정, 보안 설정, 공통 유틸리티 함수 등을 개발합니다.",
+      "notes": "애플리케이션 전체에서 일관성 있게 사용할 수 있는 유틸리티 설계",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "6c8113a6-c819-4cd5-87a8-d49fb8352413"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "src/main/java/com/example/chinook/config/WebConfig.java",
+          "type": "CREATE",
+          "description": "웹 설정 클래스",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/main/java/com/example/chinook/config/DatabaseConfig.java",
+          "type": "CREATE",
+          "description": "데이터베이스 설정 클래스",
+          "lineStart": 1,
+          "lineEnd": 35
+        },
+        {
+          "path": "src/main/java/com/example/chinook/util/DateUtils.java",
+          "type": "CREATE",
+          "description": "날짜/시간 유틸리티",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/main/java/com/example/chinook/util/ResponseUtils.java",
+          "type": "CREATE",
+          "description": "응답 처리 유틸리티",
+          "lineStart": 1,
+          "lineEnd": 35
+        }
+      ],
+      "implementationGuide": "1. 필요한 추가 설정 클래스 구현(데이터베이스, 웹 MVC 등)\n2. CORS 설정 구현\n3. 날짜/시간 처리, 문자열 처리 등의 유틸리티 클래스 구현\n4. API 응답 표준화를 위한 유틸리티 구현\n5. 필요한 경우 스프링 빈 설정 클래스 구현",
+      "verificationCriteria": "1. 모든 설정 클래스가 올바르게 구현됨\n2. CORS 설정이 적절히 구현됨\n3. 유틸리티 함수가 잘 작동함\n4. 설정이 애플리케이션 요구사항을 충족함",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "e7947bae-3ef0-452c-85a3-b56c5a9f5819",
+      "name": "OpenAPI 문서화 설정",
+      "description": "Spring Doc OpenAPI 라이브러리를 사용하여 API 문서를 자동 생성하도록 설정합니다. API 엔드포인트, 요청/응답 스키마, 예제 등을 문서화합니다.",
+      "notes": "세부적인 API 문서화로 클라이언트 개발자의 이해를 돕기 위함",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "9e60ed61-8306-4bc0-b67c-5e9fab4491ad"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "build.gradle",
+          "type": "TO_MODIFY",
+          "description": "OpenAPI 의존성 추가",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/main/java/com/example/chinook/config/OpenApiConfig.java",
+          "type": "CREATE",
+          "description": "OpenAPI 설정 클래스",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/main/resources/application.yml",
+          "type": "TO_MODIFY",
+          "description": "OpenAPI 관련 설정 추가",
+          "lineStart": 1,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "1. SpringDoc OpenAPI 의존성 추가\n2. OpenAPI 문서 설정 클래스 구현\n3. 각 컨트롤러 및 메서드에 적절한 문서화 애노테이션 추가(@Tag, @Operation 등)\n4. API 그룹화 및 분류 설정\n5. 문서 스타일 및 UI 사용자 정의\n6. 보안 스키마 문서화",
+      "verificationCriteria": "1. API 문서가 자동으로 생성됨\n2. 모든 API 엔드포인트가 적절히 문서화됨\n3. 요청/응답 스키마가 명확히 표시됨\n4. Swagger UI가 정상적으로 접근 가능함",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    },
+    {
+      "id": "37c28f1f-b480-477b-b881-4fa385f0f07e",
+      "name": "단위 테스트 및 통합 테스트 구현",
+      "description": "서비스 레이어와 컨트롤러 레이어의 단위 테스트 및 통합 테스트를 구현합니다. 주요 기능과 엣지 케이스를 테스트합니다.",
+      "notes": "테스트 커버리지를 높이고 엣지 케이스를 포함한 철저한 테스트 구현",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "9e60ed61-8306-4bc0-b67c-5e9fab4491ad"
+        },
+        {
+          "taskId": "2d63ea2b-3e0d-407b-9b27-bffb61ef4f49"
+        },
+        {
+          "taskId": "adcb639f-a062-44bc-94d4-15a331387c57"
+        }
+      ],
+      "createdAt": "2025-05-18T14:19:24.868Z",
+      "updatedAt": "2025-05-18T14:19:24.868Z",
+      "relatedFiles": [
+        {
+          "path": "src/test/java/com/example/chinook/repository/ArtistRepositoryTest.java",
+          "type": "CREATE",
+          "description": "Artist 리포지토리 테스트",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "src/test/java/com/example/chinook/service/ArtistServiceTest.java",
+          "type": "CREATE",
+          "description": "Artist 서비스 테스트",
+          "lineStart": 1,
+          "lineEnd": 60
+        },
+        {
+          "path": "src/test/java/com/example/chinook/controller/ArtistControllerTest.java",
+          "type": "CREATE",
+          "description": "Artist 컨트롤러 테스트",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/test/resources/application-test.yml",
+          "type": "CREATE",
+          "description": "테스트용 설정 파일",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "src/test/java/com/example/chinook/integration/ArtistIntegrationTest.java",
+          "type": "CREATE",
+          "description": "Artist 통합 테스트",
+          "lineStart": 1,
+          "lineEnd": 70
+        }
+      ],
+      "implementationGuide": "1. JUnit 5와 Mockito를 사용한 테스트 클래스 구현\n2. Repository, Service, Controller 각 계층별 단위 테스트 작성\n3. MockMvc를 사용한 컨트롤러 통합 테스트 구현\n4. 테스트용 데이터베이스 설정(H2 등)\n5. 테스트 데이터 설정(Fixture 등)\n6. 예외 처리 테스트 케이스 구현",
+      "verificationCriteria": "1. 모든 주요 기능에 대한 단위 테스트가 구현됨\n2. 컨트롤러 통합 테스트가 올바르게 구현됨\n3. 테스트 커버리지가 충분함\n4. 모든 테스트가 성공적으로 실행됨\n5. 엣지 케이스와 예외 상황이 테스트에 포함됨",
+      "analysisResult": "본 프로젝트는 Chinook SQLite 데이터베이스를 Spring Boot 3 API로 구현하는 애플리케이션입니다. Java 17과 Gradle을 사용하며, 다층 아키텍처(엔티티-레포지토리-서비스-컨트롤러)를 통해 RESTful API를 제공합니다. 주요 기능은 아티스트, 앨범, 트랙, 플레이리스트, 고객, 인보이스 정보를 관리하는 것이며, 모든 코드는 SOLID, DRY, KISS, YAGNI 원칙과 OWASP 보안 모범 사례를 준수해야 합니다. DTO는 record 타입으로 구현하고 적절한 입력 검증을 포함합니다."
+    }
+  ]
+}
