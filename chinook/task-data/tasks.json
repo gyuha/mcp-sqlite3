@@ -1,176 +1,153 @@
 {
   "tasks": [
     {
-      "id": "4bcec9f1-bc4e-4c8b-861a-26b6e5bf43da",
-      "name": "Chinook 엔티티 클래스 설계 및 구현",
-      "description": "Chinook 데이터베이스의 주요 테이블(Album, Artist, Customer, Employee, Genre, Invoice, InvoiceItem, MediaType, Playlist, PlaylistTrack, Track)에 대한 JPA 엔티티 클래스를 설계하고 구현합니다. 각 엔티티 간의 관계(OneToMany, ManyToOne, ManyToMany)를 적절히 매핑하고, 필요한 속성과 제약조건을 정의합니다.",
-      "status": "已完成",
+      "id": "9500b955-5b10-4184-84ac-b5d8c842e6f7",
+      "name": "서비스 레이어 - Customer 관련 기능 구현",
+      "description": "Customer 엔티티에 대한 서비스 레이어 구현. 기본적인 CRUD 작업과 함께 주문 내역 조회 등 비즈니스 로직 구현",
+      "notes": "Customer 관련 핵심 비즈니스 로직 포함",
+      "status": "待處理",
       "dependencies": [],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:45:05.781Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\entity",
-          "type": "CREATE",
-          "description": "엔티티 클래스가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 각 테이블의 스키마를 분석하여 필요한 필드와 데이터 타입 식별\n2. JPA 어노테이션을 사용하여 엔티티 클래스 구현(@Entity, @Table, @Id, @Column 등)\n3. 엔티티 간 관계 매핑(@OneToMany, @ManyToOne, @ManyToMany 등)\n4. 필요한 경우 상속 관계나 임베디드 타입 정의\n5. 모든 엔티티는 com.example.chinook.entity 패키지에 구현\n\n주요 엔티티 클래스 예시:\n```java\n@Entity\n@Table(name = \"albums\")\npublic class Album {\n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    @Column(name = \"AlbumId\")\n    private Long id;\n    \n    @Column(name = \"Title\", nullable = false)\n    private String title;\n    \n    @ManyToOne\n    @JoinColumn(name = \"ArtistId\", nullable = false)\n    private Artist artist;\n    \n    // 생성자, getter, setter 메소드\n}\n```",
-      "verificationCriteria": "1. 모든 테이블에 대한 엔티티 클래스가 올바르게 구현되었는지 확인\n2. 엔티티 간의 관계가 정확하게 매핑되었는지 확인\n3. 데이터베이스 스키마와 엔티티 구조의 일치성 확인\n4. 적절한 제약조건과 어노테이션이 적용되었는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다.",
-      "summary": "모든 Chinook 데이터베이스 테이블에 대한 JPA 엔티티 클래스를 성공적으로 구현했습니다. 각 엔티티는 적절한 어노테이션, 관계 매핑, 제약조건을 포함하고 있으며 데이터베이스 스키마와 일치합니다. Entity 간의 양방향 관계도 올바르게 설정되었으며, Lombok을 사용하여 보일러플레이트 코드를 줄였습니다. 또한 적절한 fetch 전략을 사용하여 성능 최적화도 고려하였습니다.",
-      "completedAt": "2025-05-18T14:45:05.775Z"
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. CustomerService 인터페이스 정의\n2. CustomerServiceImpl 구현\n3. 페이지네이션 지원\n4. 트랜잭션 관리\n5. DTO 변환 로직",
+      "verificationCriteria": "- 모든 CRUD 작업이 정상 동작\n- 트랜잭션 처리 정상 동작\n- DTO 변환 정확성\n- 페이지네이션 정상 동작",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
     },
     {
-      "id": "8a2110b9-9756-42d1-af9d-6b79e5f30377",
-      "name": "Repository 인터페이스 구현",
-      "description": "각 엔티티에 대한 Spring Data JPA 리포지토리 인터페이스를 생성합니다. 기본 CRUD 연산 외에도 필요한 사용자 정의 쿼리 메소드를 추가합니다. 이 리포지토리들은 서비스 계층에서 데이터 액세스를 위해 사용됩니다.",
-      "status": "已完成",
-      "dependencies": [
-        {
-          "taskId": "4bcec9f1-bc4e-4c8b-861a-26b6e5bf43da"
-        }
-      ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:49:30.774Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\repository",
-          "type": "CREATE",
-          "description": "리포지토리 인터페이스가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 각 엔티티 클래스에 대한 JpaRepository 인터페이스 생성\n2. 필요한 사용자 정의 쿼리 메소드 추가(findBy, countBy 등)\n3. JPQL 또는 네이티브 SQL 쿼리가 필요한 경우 @Query 어노테이션 사용\n4. 페이징 및 정렬을 지원하는 메소드 추가\n5. 모든 리포지토리는 com.example.chinook.repository 패키지에 구현\n\n리포지토리 인터페이스 예시:\n```java\npublic interface AlbumRepository extends JpaRepository<Album, Long> {\n    List<Album> findByArtistId(Long artistId);\n    Optional<Album> findByTitle(String title);\n    Page<Album> findAll(Pageable pageable);\n}\n```",
-      "verificationCriteria": "1. 모든 엔티티에 대한 리포지토리 인터페이스가 올바르게 구현되었는지 확인\n2. 필요한 사용자 정의 쿼리 메소드가 정확히 구현되었는지 확인\n3. 페이징 및 정렬 기능이 필요한 경우 올바르게 지원되는지 확인\n4. JPQL 또는 네이티브 SQL 쿼리가 정확히 작성되었는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다.",
-      "summary": "모든 엔티티에 대한 Spring Data JPA 리포지토리 인터페이스를 성공적으로 구현했습니다. 각 리포지토리는 기본 CRUD 연산과 함께 필요한 사용자 정의 쿼리 메소드들을 포함하고 있습니다. 성능 최적화를 위해 필요한 곳에 JPQL과 네이티브 SQL 쿼리를 사용했으며, 페이징과 정렬 기능도 적절히 구현되어 있습니다. 또한 N+1 쿼리 문제를 방지하기 위해 필요한 곳에 FETCH JOIN을 사용했습니다.",
-      "completedAt": "2025-05-18T14:49:30.766Z"
-    },
-    {
-      "id": "8e5196d1-e02c-4432-a7e1-a1407b48d8a1",
-      "name": "DTO 클래스 구현",
-      "description": "클라이언트와의 데이터 교환을 위한 DTO(Data Transfer Object) 클래스를 구현합니다. Java 17의 record 타입을 사용하여 불변 객체로 구현하며, 입력 매개변수 검증을 위한 간결한 canonical 생성자를 추가합니다.",
-      "status": "已完成",
-      "dependencies": [
-        {
-          "taskId": "4bcec9f1-bc4e-4c8b-861a-26b6e5bf43da"
-        }
-      ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:54:14.851Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\dto",
-          "type": "CREATE",
-          "description": "DTO 클래스가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 각 엔티티에 대한 요청/응답 DTO 클래스 설계\n2. Java 17 record 타입으로 구현\n3. 입력 매개변수 검증을 위한 canonical 생성자 구현\n4. 필요한 경우 중첩 DTO나 페이징 응답을 위한 DTO 구현\n5. 모든 DTO는 com.example.chinook.dto 패키지에 구현\n\nDTO 클래스 예시:\n```java\npublic record AlbumDto(Long id, String title, ArtistDto artist) {\n    public AlbumDto {\n        Objects.requireNonNull(title, \"앨범 제목은 null일 수 없습니다.\");\n        Objects.requireNonNull(artist, \"아티스트 정보는 null일 수 없습니다.\");\n        if (title.isBlank()) {\n            throw new IllegalArgumentException(\"앨범 제목은 비어있을 수 없습니다.\");\n        }\n    }\n}\n\npublic record ArtistDto(Long id, String name) {\n    public ArtistDto {\n        Objects.requireNonNull(name, \"아티스트 이름은 null일 수 없습니다.\");\n        if (name.isBlank()) {\n            throw new IllegalArgumentException(\"아티스트 이름은 비어있을 수 없습니다.\");\n        }\n    }\n}\n```",
-      "verificationCriteria": "1. 모든 필요한 DTO 클래스가 record 타입으로 올바르게 구현되었는지 확인\n2. 입력 매개변수 검증 로직이 올바르게 구현되었는지 확인\n3. 엔티티와 DTO 간의 구조적 일관성 확인\n4. 필요한 중첩 DTO나 페이징 응답 DTO가 구현되었는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다.",
-      "summary": "모든 엔티티에 대한 DTO 클래스를 Java 17의 record 타입으로 성공적으로 구현했습니다. 각 DTO는 기본 정보를 위한 간단한 버전과 상세 정보를 위한 Detail 버전으로 구분하여 구현했으며, 모든 DTO는 필요한 validation 로직을 포함하고 있습니다. 또한 페이징 처리를 위한 PageResponse DTO도 구현했습니다. 모든 DTO는 불변 객체로 설계되어 있어 스레드 안전성이 보장됩니다.",
-      "completedAt": "2025-05-18T14:54:14.844Z"
-    },
-    {
-      "id": "2563f89c-5b9a-4815-aec7-8a3dc41f7bc5",
-      "name": "서비스 계층 구현",
-      "description": "비즈니스 로직을 처리할 서비스 계층을 구현합니다. 각 엔티티에 대한 서비스 인터페이스와 그 구현체를 생성하고, 리포지토리를 활용하여 데이터 액세스 및 비즈니스 로직을 처리합니다. 또한 엔티티와 DTO 간의 변환 로직을 구현합니다.",
+      "id": "20cb4546-b52c-4ce6-ace5-62db200044cb",
+      "name": "서비스 레이어 - Invoice 관련 기능 구현",
+      "description": "Invoice와 InvoiceItem 엔티티에 대한 서비스 레이어 구현. 주문 처리와 결제 관련 비즈니스 로직 포함",
+      "notes": "복잡한 비즈니스 로직이 포함된 중요 기능",
       "status": "待處理",
       "dependencies": [
         {
-          "taskId": "8a2110b9-9756-42d1-af9d-6b79e5f30377"
+          "taskId": "9500b955-5b10-4184-84ac-b5d8c842e6f7"
+        }
+      ],
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. InvoiceService 인터페이스 정의\n2. InvoiceServiceImpl 구현\n3. 주문 상태 관리\n4. 결제 처리 로직\n5. 트랜잭션 관리",
+      "verificationCriteria": "- 주문 처리 정상 동작\n- 결제 처리 정상 동작\n- 트랜잭션 롤백 테스트\n- DTO 변환 정확성",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+    },
+    {
+      "id": "adef5bcd-0a4e-4aeb-8825-0bd9d201a077",
+      "name": "서비스 레이어 - Employee 관련 기능 구현",
+      "description": "Employee 엔티티에 대한 서비스 레이어 구현. 직원 관리 및 권한 처리 로직 포함",
+      "notes": "직원 관리 시스템의 핵심 기능",
+      "status": "待處理",
+      "dependencies": [],
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. EmployeeService 인터페이스 정의\n2. EmployeeServiceImpl 구현\n3. 직원 계층 구조 관리\n4. 권한 처리",
+      "verificationCriteria": "- CRUD 작업 정상 동작\n- 계층 구조 관리 정확성\n- 권한 처리 정상 동작",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+    },
+    {
+      "id": "2b9aecc7-a681-40cc-b29b-9043b577a480",
+      "name": "서비스 레이어 - Genre & MediaType 기능 구현",
+      "description": "Genre와 MediaType 엔티티에 대한 서비스 레이어 구현. 기본적인 CRUD 작업 위주",
+      "notes": "비교적 단순한 도메인 로직",
+      "status": "待處理",
+      "dependencies": [],
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. GenreService와 MediaTypeService 인터페이스 정의\n2. 구현체 작성\n3. 캐시 적용 검토",
+      "verificationCriteria": "- CRUD 작업 정상 동작\n- 캐시 동작 확인\n- DTO 변환 정확성",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+    },
+    {
+      "id": "98555cab-8a58-412a-a335-01cc381ef70e",
+      "name": "컨트롤러 레이어 - Customer & Invoice API 구현",
+      "description": "Customer와 Invoice 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
+      "notes": "핵심 비즈니스 기능 API",
+      "status": "待處理",
+      "dependencies": [
+        {
+          "taskId": "9500b955-5b10-4184-84ac-b5d8c842e6f7"
         },
         {
-          "taskId": "8e5196d1-e02c-4432-a7e1-a1407b48d8a1"
+          "taskId": "20cb4546-b52c-4ce6-ace5-62db200044cb"
         }
       ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:43:37.794Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\service",
-          "type": "CREATE",
-          "description": "서비스 인터페이스 및 구현체가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 각 엔티티에 대한 서비스 인터페이스 및 구현체 생성\n2. Spring의 @Service 어노테이션을 사용하여 빈으로 등록\n3. 리포지토리를 주입받아 데이터 액세스 로직 구현\n4. 엔티티와 DTO 간의 변환 로직 구현\n5. 트랜잭션 관리를 위한 @Transactional 어노테이션 활용\n6. 모든 서비스는 com.example.chinook.service 패키지에 구현\n\n서비스 인터페이스 및 구현체 예시:\n```java\npublic interface AlbumService {\n    List<AlbumDto> getAllAlbums(int page, int size);\n    AlbumDto getAlbumById(Long id);\n    List<AlbumDto> getAlbumsByArtistId(Long artistId);\n    AlbumDto createAlbum(AlbumDto albumDto);\n    AlbumDto updateAlbum(Long id, AlbumDto albumDto);\n    void deleteAlbum(Long id);\n}\n\n@Service\npublic class AlbumServiceImpl implements AlbumService {\n    private final AlbumRepository albumRepository;\n    private final ArtistRepository artistRepository;\n    \n    public AlbumServiceImpl(AlbumRepository albumRepository, ArtistRepository artistRepository) {\n        this.albumRepository = albumRepository;\n        this.artistRepository = artistRepository;\n    }\n    \n    @Override\n    public List<AlbumDto> getAllAlbums(int page, int size) {\n        Pageable pageable = PageRequest.of(page, size);\n        return albumRepository.findAll(pageable).stream()\n                .map(this::convertToDto)\n                .collect(Collectors.toList());\n    }\n    \n    // 다른 메소드 구현 및 Entity-DTO 변환 로직\n}\n```",
-      "verificationCriteria": "1. 모든 엔티티에 대한 서비스 인터페이스 및 구현체가 올바르게 구현되었는지 확인\n2. 비즈니스 로직이 서비스 계층에 적절히 캡슐화되었는지 확인\n3. 엔티티와 DTO 간의 변환 로직이 정확히 구현되었는지 확인\n4. 트랜잭션 관리가 적절히 적용되었는지 확인\n5. 서비스 계층이 리포지토리를 올바르게 활용하는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다."
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. 요청/응답 DTO 매핑\n4. Swagger 문서화",
+      "verificationCriteria": "- API 엔드포인트 접근 가능\n- Swagger 문서 생성\n- 응답 형식 정확성",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
     },
     {
-      "id": "9631735d-f216-4ac4-b02c-ee8d9d4e316f",
-      "name": "REST 컨트롤러 구현",
-      "description": "클라이언트와의 HTTP 통신을 처리할 REST 컨트롤러를 구현합니다. 각 리소스에 대한 CRUD 작업과 기타 비즈니스 요구사항을 처리하는 엔드포인트를 제공합니다. 서비스 계층을 활용하여 비즈니스 로직을 처리하고, DTO를 통해 데이터를 주고받습니다.",
+      "id": "83861e7f-213d-4ea9-846f-f05034bcd4b3",
+      "name": "컨트롤러 레이어 - Employee API 구현",
+      "description": "Employee 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
+      "notes": "직원 관리 시스템 API",
       "status": "待處理",
       "dependencies": [
         {
-          "taskId": "2563f89c-5b9a-4815-aec7-8a3dc41f7bc5"
+          "taskId": "adef5bcd-0a4e-4aeb-8825-0bd9d201a077"
         }
       ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:43:37.794Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\controller",
-          "type": "CREATE",
-          "description": "REST 컨트롤러가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 각 리소스에 대한 RestController 클래스 생성\n2. Spring MVC 어노테이션(@RestController, @RequestMapping, @GetMapping 등) 활용\n3. 서비스 계층을 주입받아 비즈니스 로직 처리\n4. DTO를 통한 요청/응답 데이터 처리\n5. 적절한 HTTP 상태 코드 및 응답 제공\n6. 예외 처리 및 유효성 검사 구현\n7. 모든 컨트롤러는 com.example.chinook.controller 패키지에 구현\n\n컨트롤러 클래스 예시:\n```java\n@RestController\n@RequestMapping(\"/api/albums\")\npublic class AlbumController {\n    private final AlbumService albumService;\n    \n    public AlbumController(AlbumService albumService) {\n        this.albumService = albumService;\n    }\n    \n    @GetMapping\n    public ResponseEntity<List<AlbumDto>> getAllAlbums(\n            @RequestParam(defaultValue = \"0\") int page,\n            @RequestParam(defaultValue = \"10\") int size) {\n        return ResponseEntity.ok(albumService.getAllAlbums(page, size));\n    }\n    \n    @GetMapping(\"/{id}\")\n    public ResponseEntity<AlbumDto> getAlbumById(@PathVariable Long id) {\n        return ResponseEntity.ok(albumService.getAlbumById(id));\n    }\n    \n    // 다른 엔드포인트 구현\n}\n```",
-      "verificationCriteria": "1. 모든 필요한 리소스에 대한 REST 엔드포인트가 구현되었는지 확인\n2. 적절한 HTTP 메소드와 상태 코드가 사용되었는지 확인\n3. 요청/응답 데이터가 DTO를 통해 처리되는지 확인\n4. 컨트롤러가 서비스 계층을 올바르게 활용하는지 확인\n5. 예외 처리 및 유효성 검사가 적절히 구현되었는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다."
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. 권한 검증 로직\n4. Swagger 문서화",
+      "verificationCriteria": "- API 엔드포인트 접근 가능\n- 권한 검증 정상 동작\n- Swagger 문서 생성",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
     },
     {
-      "id": "a0025860-7a14-420d-9cb9-75cfd547b858",
-      "name": "예외 처리 및 오류 응답 구현",
-      "description": "애플리케이션 전반에 걸친 예외 처리 및 일관된 오류 응답 형식을 구현합니다. 글로벌 예외 핸들러를 통해 다양한 예외 상황에 대해 적절한 HTTP 상태 코드와 오류 메시지를 제공합니다.",
+      "id": "ba02d32e-e6ad-4e42-8019-9cbc7b9e4e7d",
+      "name": "컨트롤러 레이어 - Genre & MediaType API 구현",
+      "description": "Genre와 MediaType 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
+      "notes": "기본적인 CRUD API",
       "status": "待處理",
       "dependencies": [
         {
-          "taskId": "9631735d-f216-4ac4-b02c-ee8d9d4e316f"
+          "taskId": "2b9aecc7-a681-40cc-b29b-9043b577a480"
         }
       ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:43:37.794Z",
-      "relatedFiles": [
-        {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\exception",
-          "type": "CREATE",
-          "description": "예외 처리 관련 클래스가 위치할 패키지 디렉토리"
-        }
-      ],
-      "implementationGuide": "1. 사용자 정의 예외 클래스 생성(ResourceNotFoundException, BadRequestException 등)\n2. @ControllerAdvice 또는 @RestControllerAdvice를 사용한 글로벌 예외 핸들러 구현\n3. 다양한 예외 상황에 대한 처리 메소드 정의(@ExceptionHandler)\n4. 일관된 오류 응답 DTO 구현\n5. 예외 처리 관련 클래스는 com.example.chinook.exception 패키지에 구현\n\n예외 처리 관련 클래스 예시:\n```java\npublic class ErrorResponse {\n    private final int status;\n    private final String message;\n    private final LocalDateTime timestamp;\n    \n    // 생성자, getter 메소드\n}\n\n@RestControllerAdvice\npublic class GlobalExceptionHandler {\n    @ExceptionHandler(ResourceNotFoundException.class)\n    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {\n        ErrorResponse errorResponse = new ErrorResponse(\n            HttpStatus.NOT_FOUND.value(),\n            ex.getMessage(),\n            LocalDateTime.now()\n        );\n        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);\n    }\n    \n    // 다른 예외 처리 메소드\n}\n```",
-      "verificationCriteria": "1. 주요 예외 상황에 대한 사용자 정의 예외 클래스가 구현되었는지 확인\n2. 글로벌 예외 핸들러가 올바르게 구현되었는지 확인\n3. 일관된 오류 응답 형식이 제공되는지 확인\n4. 다양한 예외 상황에 대해 적절한 HTTP 상태 코드가 반환되는지 확인",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다."
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. Swagger 문서화",
+      "verificationCriteria": "- API 엔드포인트 접근 가능\n- Swagger 문서 생성\n- 캐시 동작 확인",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
     },
     {
-      "id": "12cea005-b804-490b-80c0-d13a91b1b79e",
-      "name": "애플리케이션 테스트 및 검증",
-      "description": "구현된 API의 기능을 테스트하고 검증합니다. 단위 테스트와 통합 테스트를 통해 각 계층의 기능이 올바르게 동작하는지 확인하고, 애플리케이션이 요구사항을 충족하는지 검증합니다.",
+      "id": "4a82bd61-e445-4b36-bfd0-9971e5abf7b4",
+      "name": "예외 처리 구현",
+      "description": "전역 예외 처리 및 커스텀 예외 클래스 구현",
+      "notes": "전체 애플리케이션의 예외 처리 표준화",
+      "status": "待處理",
+      "dependencies": [],
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. GlobalExceptionHandler 구현\n2. 커스텀 예외 클래스 정의\n3. 예외 응답 형식 정의",
+      "verificationCriteria": "- 예외 처리 정상 동작\n- 적절한 HTTP 상태 코드 반환\n- 일관된 에러 응답 형식",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+    },
+    {
+      "id": "788a0df1-e2b7-47f1-8e99-c4bd748afebe",
+      "name": "API 테스트 구현",
+      "description": "구현된 API에 대한 통합 테스트 작성",
+      "notes": "전체 시스템 검증",
       "status": "待處理",
       "dependencies": [
         {
-          "taskId": "9631735d-f216-4ac4-b02c-ee8d9d4e316f"
+          "taskId": "98555cab-8a58-412a-a335-01cc381ef70e"
         },
         {
-          "taskId": "2563f89c-5b9a-4815-aec7-8a3dc41f7bc5"
+          "taskId": "83861e7f-213d-4ea9-846f-f05034bcd4b3"
         },
         {
-          "taskId": "a0025860-7a14-420d-9cb9-75cfd547b858"
-        }
-      ],
-      "createdAt": "2025-05-18T14:43:37.794Z",
-      "updatedAt": "2025-05-18T14:43:37.794Z",
-      "relatedFiles": [
+          "taskId": "ba02d32e-e6ad-4e42-8019-9cbc7b9e4e7d"
+        },
         {
-          "path": "d:\\workspace\\mcp-sqlite3\\chinook\\src\\test",
-          "type": "CREATE",
-          "description": "테스트 코드가 위치할 디렉토리"
+          "taskId": "4a82bd61-e445-4b36-bfd0-9971e5abf7b4"
         }
       ],
-      "implementationGuide": "1. 각 계층(리포지토리, 서비스, 컨트롤러)에 대한 단위 테스트 구현\n2. Spring Boot 테스트 프레임워크를 활용한 통합 테스트 구현\n3. Mockito 등을 사용한 모킹 및 스텁 구현\n4. 각 API 엔드포인트에 대한 HTTP 요청/응답 테스트\n5. 테스트 코드는 src/test/java 디렉토리에 구현\n\n테스트 클래스 예시:\n```java\n@SpringBootTest\npublic class AlbumServiceTest {\n    @MockBean\n    private AlbumRepository albumRepository;\n    \n    @Autowired\n    private AlbumService albumService;\n    \n    @Test\n    public void testGetAlbumById() {\n        // 테스트 구현\n    }\n    \n    // 다른 테스트 메소드\n}\n\n@WebMvcTest(AlbumController.class)\npublic class AlbumControllerTest {\n    @MockBean\n    private AlbumService albumService;\n    \n    @Autowired\n    private MockMvc mockMvc;\n    \n    @Test\n    public void testGetAlbumById() throws Exception {\n        // 테스트 구현\n    }\n    \n    // 다른 테스트 메소드\n}\n```",
-      "verificationCriteria": "1. 각 계층에 대한 테스트 코드가 구현되었는지 확인\n2. 테스트 커버리지가 충분한지 확인\n3. 모든 테스트가 성공적으로 실행되는지 확인\n4. 요구사항이 충족되는지 검증",
-      "analysisResult": "Chinook 데이터베이스를 활용한 Spring Boot REST API 개발 프로젝트에 대한 분석이 완료되었습니다. 이 프로젝트는 음악 스토어의 디지털 미디어 판매 관리를 위한 SQLite 데이터베이스를 기반으로 REST API를 개발하는 작업입니다. 표준 Spring Boot 계층 아키텍처(Controller-Service-Repository-Entity)를 따르며, SOLID, DRY, KISS, YAGNI 원칙을 준수하여 개발합니다. DTO는 Java 17의 record 타입으로 구현하고, 컨트롤러와 서비스 계층 간 데이터 전달에 사용합니다. SQLite 데이터베이스 설정은 이미 완료되어 있으며, 추가적인 엔티티, 리포지토리, 서비스, 컨트롤러 구현이 필요합니다."
+      "createdAt": "2025-05-18T15:04:48.618Z",
+      "updatedAt": "2025-05-18T15:04:48.618Z",
+      "implementationGuide": "1. 테스트 환경 설정\n2. 테스트 케이스 작성\n3. API 호출 테스트",
+      "verificationCriteria": "- 모든 API 테스트 성공\n- 예외 케이스 처리 확인\n- 성능 테스트",
+      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
     }
   ]
 }
