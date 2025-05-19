@@ -1,153 +1,94 @@
 {
   "tasks": [
     {
-      "id": "9500b955-5b10-4184-84ac-b5d8c842e6f7",
-      "name": "서비스 레이어 - Customer 관련 기능 구현",
-      "description": "Customer 엔티티에 대한 서비스 레이어 구현. 기본적인 CRUD 작업과 함께 주문 내역 조회 등 비즈니스 로직 구현",
-      "notes": "Customer 관련 핵심 비즈니스 로직 포함",
-      "status": "待處理",
+      "id": "296a97ab-2b0e-46dc-b1bd-e405c21efda2",
+      "name": "SQLiteDialect 클래스 업데이트",
+      "description": "Hibernate 6.x와 호환되도록 SQLiteDialect 클래스를 업데이트합니다.",
+      "notes": "Hibernate 6.x의 주요 변경사항을 고려해야 합니다.",
+      "status": "進行中",
       "dependencies": [],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. CustomerService 인터페이스 정의\n2. CustomerServiceImpl 구현\n3. 페이지네이션 지원\n4. 트랜잭션 관리\n5. DTO 변환 로직",
-      "verificationCriteria": "- 모든 CRUD 작업이 정상 동작\n- 트랜잭션 처리 정상 동작\n- DTO 변환 정확성\n- 페이지네이션 정상 동작",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "20cb4546-b52c-4ce6-ace5-62db200044cb",
-      "name": "서비스 레이어 - Invoice 관련 기능 구현",
-      "description": "Invoice와 InvoiceItem 엔티티에 대한 서비스 레이어 구현. 주문 처리와 결제 관련 비즈니스 로직 포함",
-      "notes": "복잡한 비즈니스 로직이 포함된 중요 기능",
-      "status": "待處理",
-      "dependencies": [
+      "createdAt": "2025-05-19T10:51:17.299Z",
+      "updatedAt": "2025-05-19T10:51:24.307Z",
+      "relatedFiles": [
         {
-          "taskId": "9500b955-5b10-4184-84ac-b5d8c842e6f7"
-        }
-      ],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. InvoiceService 인터페이스 정의\n2. InvoiceServiceImpl 구현\n3. 주문 상태 관리\n4. 결제 처리 로직\n5. 트랜잭션 관리",
-      "verificationCriteria": "- 주문 처리 정상 동작\n- 결제 처리 정상 동작\n- 트랜잭션 롤백 테스트\n- DTO 변환 정확성",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "adef5bcd-0a4e-4aeb-8825-0bd9d201a077",
-      "name": "서비스 레이어 - Employee 관련 기능 구현",
-      "description": "Employee 엔티티에 대한 서비스 레이어 구현. 직원 관리 및 권한 처리 로직 포함",
-      "notes": "직원 관리 시스템의 핵심 기능",
-      "status": "待處理",
-      "dependencies": [],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. EmployeeService 인터페이스 정의\n2. EmployeeServiceImpl 구현\n3. 직원 계층 구조 관리\n4. 권한 처리",
-      "verificationCriteria": "- CRUD 작업 정상 동작\n- 계층 구조 관리 정확성\n- 권한 처리 정상 동작",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "2b9aecc7-a681-40cc-b29b-9043b577a480",
-      "name": "서비스 레이어 - Genre & MediaType 기능 구현",
-      "description": "Genre와 MediaType 엔티티에 대한 서비스 레이어 구현. 기본적인 CRUD 작업 위주",
-      "notes": "비교적 단순한 도메인 로직",
-      "status": "待處理",
-      "dependencies": [],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. GenreService와 MediaTypeService 인터페이스 정의\n2. 구현체 작성\n3. 캐시 적용 검토",
-      "verificationCriteria": "- CRUD 작업 정상 동작\n- 캐시 동작 확인\n- DTO 변환 정확성",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "98555cab-8a58-412a-a335-01cc381ef70e",
-      "name": "컨트롤러 레이어 - Customer & Invoice API 구현",
-      "description": "Customer와 Invoice 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
-      "notes": "핵심 비즈니스 기능 API",
-      "status": "待處理",
-      "dependencies": [
-        {
-          "taskId": "9500b955-5b10-4184-84ac-b5d8c842e6f7"
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\config\\SQLiteDialect.java",
+          "type": "TO_MODIFY",
+          "description": "SQLiteDialect 클래스 파일"
         },
         {
-          "taskId": "20cb4546-b52c-4ce6-ace5-62db200044cb"
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\build.gradle",
+          "type": "TO_MODIFY",
+          "description": "Gradle 빌드 설정 파일"
         }
       ],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. 요청/응답 DTO 매핑\n4. Swagger 문서화",
-      "verificationCriteria": "- API 엔드포인트 접근 가능\n- Swagger 문서 생성\n- 응답 형식 정확성",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+      "implementationGuide": "1. SQLiteDialect 클래스를 최신 Hibernate 6.x API에 맞게 수정\n2. 필요한 의존성 추가\n3. registerColumnType 및 registerFunction 메서드 호환성 수정",
+      "verificationCriteria": "1. 컴파일 오류가 없어야 함\n2. Hibernate 6.x API와 호환되어야 함\n3. SQLite 데이터베이스와 정상적으로 연동되어야 함",
+      "analysisResult": "1. 작업 목표\n- Spring Boot 애플리케이션의 컴파일 오류 수정\n- Hibernate 6.x 호환성 확보\n- 코드 품질 향상\n\n2. 기술 스택\n- Java 17\n- Spring Boot 3\n- Hibernate 6.x\n- SQLite\n- Lombok\n\n3. 아키텍처 원칙\n- Spring Boot 표준 아키텍처 준수\n- 계층 간 명확한 책임 분리\n- 코드 재사용성과 유지보수성 고려\n\n4. 작업 우선순위\n(1) SQLiteDialect 업데이트 - 데이터베이스 연동의 기본\n(2) Entity 클래스 수정 - 데이터 액세스 계층\n(3) TrackDto 파일 이름 수정 - Java 명명 규칙 준수\n(4) PageResponse 수정 - 타입 안전성 확보"
     },
     {
-      "id": "83861e7f-213d-4ea9-846f-f05034bcd4b3",
-      "name": "컨트롤러 레이어 - Employee API 구현",
-      "description": "Employee 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
-      "notes": "직원 관리 시스템 API",
-      "status": "待處理",
-      "dependencies": [
-        {
-          "taskId": "adef5bcd-0a4e-4aeb-8825-0bd9d201a077"
-        }
-      ],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. 권한 검증 로직\n4. Swagger 문서화",
-      "verificationCriteria": "- API 엔드포인트 접근 가능\n- 권한 검증 정상 동작\n- Swagger 문서 생성",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "ba02d32e-e6ad-4e42-8019-9cbc7b9e4e7d",
-      "name": "컨트롤러 레이어 - Genre & MediaType API 구현",
-      "description": "Genre와 MediaType 관련 REST API 엔드포인트 구현 및 Swagger 문서화",
-      "notes": "기본적인 CRUD API",
-      "status": "待處理",
-      "dependencies": [
-        {
-          "taskId": "2b9aecc7-a681-40cc-b29b-9043b577a480"
-        }
-      ],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. RestController 구현\n2. API 엔드포인트 정의\n3. Swagger 문서화",
-      "verificationCriteria": "- API 엔드포인트 접근 가능\n- Swagger 문서 생성\n- 캐시 동작 확인",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "4a82bd61-e445-4b36-bfd0-9971e5abf7b4",
-      "name": "예외 처리 구현",
-      "description": "전역 예외 처리 및 커스텀 예외 클래스 구현",
-      "notes": "전체 애플리케이션의 예외 처리 표준화",
+      "id": "38f5f929-a8ae-4fc1-b222-4ceb09557e32",
+      "name": "TrackDto 파일 이름 수정",
+      "description": "Java 명명 규칙에 맞게 TrackDto-new.java 파일을 TrackDto.java로 이름을 변경합니다.",
+      "notes": "파일 이름 변경이 다른 클래스에 미치는 영향을 확인해야 합니다.",
       "status": "待處理",
       "dependencies": [],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. GlobalExceptionHandler 구현\n2. 커스텀 예외 클래스 정의\n3. 예외 응답 형식 정의",
-      "verificationCriteria": "- 예외 처리 정상 동작\n- 적절한 HTTP 상태 코드 반환\n- 일관된 에러 응답 형식",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
-    },
-    {
-      "id": "788a0df1-e2b7-47f1-8e99-c4bd748afebe",
-      "name": "API 테스트 구현",
-      "description": "구현된 API에 대한 통합 테스트 작성",
-      "notes": "전체 시스템 검증",
-      "status": "待處理",
-      "dependencies": [
+      "createdAt": "2025-05-19T10:51:17.299Z",
+      "updatedAt": "2025-05-19T10:51:17.299Z",
+      "relatedFiles": [
         {
-          "taskId": "98555cab-8a58-412a-a335-01cc381ef70e"
-        },
-        {
-          "taskId": "83861e7f-213d-4ea9-846f-f05034bcd4b3"
-        },
-        {
-          "taskId": "ba02d32e-e6ad-4e42-8019-9cbc7b9e4e7d"
-        },
-        {
-          "taskId": "4a82bd61-e445-4b36-bfd0-9971e5abf7b4"
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\dto\\TrackDto-new.java",
+          "type": "TO_MODIFY",
+          "description": "TrackDto 클래스 파일"
         }
       ],
-      "createdAt": "2025-05-18T15:04:48.618Z",
-      "updatedAt": "2025-05-18T15:04:48.618Z",
-      "implementationGuide": "1. 테스트 환경 설정\n2. 테스트 케이스 작성\n3. API 호출 테스트",
-      "verificationCriteria": "- 모든 API 테스트 성공\n- 예외 케이스 처리 확인\n- 성능 테스트",
-      "analysisResult": "시스템 아키텍처:\n1. 계층화된 구조 (Controller-Service-Repository)\n2. DTO 기반의 데이터 전송\n3. 트랜잭션 관리\n4. 전역 예외 처리\n5. Swagger 기반 API 문서화"
+      "implementationGuide": "1. TrackDto-new.java 파일을 TrackDto.java로 이름 변경\n2. 관련 임포트 수정",
+      "verificationCriteria": "1. 파일 이름이 Java 명명 규칙을 준수해야 함\n2. 컴파일 오류가 없어야 함\n3. 관련된 모든 참조가 정상적으로 동작해야 함",
+      "analysisResult": "1. 작업 목표\n- Spring Boot 애플리케이션의 컴파일 오류 수정\n- Hibernate 6.x 호환성 확보\n- 코드 품질 향상\n\n2. 기술 스택\n- Java 17\n- Spring Boot 3\n- Hibernate 6.x\n- SQLite\n- Lombok\n\n3. 아키텍처 원칙\n- Spring Boot 표준 아키텍처 준수\n- 계층 간 명확한 책임 분리\n- 코드 재사용성과 유지보수성 고려\n\n4. 작업 우선순위\n(1) SQLiteDialect 업데이트 - 데이터베이스 연동의 기본\n(2) Entity 클래스 수정 - 데이터 액세스 계층\n(3) TrackDto 파일 이름 수정 - Java 명명 규칙 준수\n(4) PageResponse 수정 - 타입 안전성 확보"
+    },
+    {
+      "id": "403c8d68-867e-460f-a7c4-5c5a050bfb9a",
+      "name": "Entity 클래스에 Lombok 애노테이션 추가",
+      "description": "모든 Entity 클래스에 Lombok @Getter, @Setter 애노테이션을 추가하여 getter/setter 메서드를 자동으로 생성합니다.",
+      "notes": "Lombok 의존성이 이미 추가되어 있는지 확인해야 합니다.",
+      "status": "待處理",
+      "dependencies": [],
+      "createdAt": "2025-05-19T10:51:17.299Z",
+      "updatedAt": "2025-05-19T10:51:17.299Z",
+      "relatedFiles": [
+        {
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\entity",
+          "type": "TO_MODIFY",
+          "description": "Entity 클래스 디렉토리"
+        },
+        {
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\build.gradle",
+          "type": "TO_MODIFY",
+          "description": "Gradle 빌드 설정 파일"
+        }
+      ],
+      "implementationGuide": "1. Entity 클래스 파일을 확인\n2. 각 클래스에 @Getter, @Setter 애노테이션 추가\n3. 불필요한 수동 getter/setter 메서드 제거",
+      "verificationCriteria": "1. 모든 Entity 클래스에 Lombok 애노테이션이 추가되어야 함\n2. 컴파일 오류가 없어야 함\n3. getter/setter 메서드가 정상적으로 생성되어야 함",
+      "analysisResult": "1. 작업 목표\n- Spring Boot 애플리케이션의 컴파일 오류 수정\n- Hibernate 6.x 호환성 확보\n- 코드 품질 향상\n\n2. 기술 스택\n- Java 17\n- Spring Boot 3\n- Hibernate 6.x\n- SQLite\n- Lombok\n\n3. 아키텍처 원칙\n- Spring Boot 표준 아키텍처 준수\n- 계층 간 명확한 책임 분리\n- 코드 재사용성과 유지보수성 고려\n\n4. 작업 우선순위\n(1) SQLiteDialect 업데이트 - 데이터베이스 연동의 기본\n(2) Entity 클래스 수정 - 데이터 액세스 계층\n(3) TrackDto 파일 이름 수정 - Java 명명 규칙 준수\n(4) PageResponse 수정 - 타입 안전성 확보"
+    },
+    {
+      "id": "5b7ada74-a846-46c8-8248-f7ab99e3b3dd",
+      "name": "PageResponse 제네릭 타입 수정",
+      "description": "PageResponse 클래스의 제네릭 타입 파라미터와 생성자를 수정하여 타입 추론 문제를 해결합니다.",
+      "notes": "제네릭 타입 추론이 정상적으로 동작하도록 해야 합니다.",
+      "status": "待處理",
+      "dependencies": [],
+      "createdAt": "2025-05-19T10:51:17.299Z",
+      "updatedAt": "2025-05-19T10:51:17.299Z",
+      "relatedFiles": [
+        {
+          "path": "D:\\workspace\\mcp-sqlite3\\chinook\\src\\main\\java\\com\\example\\chinook\\dto\\PageResponse.java",
+          "type": "TO_MODIFY",
+          "description": "PageResponse 클래스 파일"
+        }
+      ],
+      "implementationGuide": "1. PageResponse 클래스의 제네릭 타입 선언 검토\n2. 생성자 파라미터 타입 수정\n3. 관련 메서드 시그니처 조정",
+      "verificationCriteria": "1. 제네릭 타입 추론이 정상적으로 동작해야 함\n2. 컴파일 오류가 없어야 함\n3. PageResponse를 사용하는 코드에서 타입 안전성이 보장되어야 함",
+      "analysisResult": "1. 작업 목표\n- Spring Boot 애플리케이션의 컴파일 오류 수정\n- Hibernate 6.x 호환성 확보\n- 코드 품질 향상\n\n2. 기술 스택\n- Java 17\n- Spring Boot 3\n- Hibernate 6.x\n- SQLite\n- Lombok\n\n3. 아키텍처 원칙\n- Spring Boot 표준 아키텍처 준수\n- 계층 간 명확한 책임 분리\n- 코드 재사용성과 유지보수성 고려\n\n4. 작업 우선순위\n(1) SQLiteDialect 업데이트 - 데이터베이스 연동의 기본\n(2) Entity 클래스 수정 - 데이터 액세스 계층\n(3) TrackDto 파일 이름 수정 - Java 명명 규칙 준수\n(4) PageResponse 수정 - 타입 안전성 확보"
     }
   ]
 }
