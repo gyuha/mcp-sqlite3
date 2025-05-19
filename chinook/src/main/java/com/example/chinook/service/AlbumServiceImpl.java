@@ -5,6 +5,8 @@ import com.example.chinook.dto.AlbumDetailDto;
 import com.example.chinook.dto.ArtistDto;
 import com.example.chinook.dto.PageResponse;
 import com.example.chinook.dto.TrackDto;
+import com.example.chinook.dto.MediaTypeDto;
+import com.example.chinook.dto.GenreDto;
 import com.example.chinook.entity.Album;
 import com.example.chinook.entity.Artist;
 import com.example.chinook.repository.AlbumRepository;

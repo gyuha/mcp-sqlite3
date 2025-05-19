@@ -5,13 +5,14 @@ spring:
     username: 
     password: 
   jpa:
-    database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
       ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 logging:
   level:

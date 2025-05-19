@@ -5,13 +5,14 @@ spring:
     username: 
     password: 
   jpa:
-    database-platform: com.example.chinook.config.SQLiteDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 logging:
   level:

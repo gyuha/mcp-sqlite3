@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.chinook.service.MediaTypeServiceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-05-19T11:44:36" hostname="GYUHA-HOME-DESK" time="0.039">
+  <properties/>
+  <testcase name="createMediaType_DuplicateName()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.026"/>
+  <testcase name="getMediaTypeTrackCount_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.003"/>
+  <testcase name="getMediaTypeWithTracks_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.001"/>
+  <testcase name="searchMediaTypesByName_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.001"/>
+  <testcase name="createMediaType_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.001"/>
+  <testcase name="getAllMediaTypes_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.001"/>
+  <testcase name="updateMediaType_Success()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.002"/>
+  <testcase name="deleteMediaType_WithTracks()" classname="com.example.chinook.service.MediaTypeServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

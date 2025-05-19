@@ -52,7 +52,9 @@ public class GenreController {
             genrePage.getNumber(),
             genrePage.getSize(),
             genrePage.getTotalElements(),
-            genrePage.getTotalPages()
+            genrePage.getTotalPages(),
+            genrePage.isFirst(),
+            genrePage.isLast()
         );
         
         return ResponseEntity.ok(response);
@@ -77,7 +79,9 @@ public class GenreController {
             genrePage.getNumber(),
             genrePage.getSize(),
             genrePage.getTotalElements(),
-            genrePage.getTotalPages()
+            genrePage.getTotalPages(),
+            genrePage.isFirst(),
+            genrePage.isLast()
         );
         
         return ResponseEntity.ok(response);

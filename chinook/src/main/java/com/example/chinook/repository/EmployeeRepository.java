@@ -14,7 +14,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     
     Optional<Employee> findByEmail(String email);
     
-    List<Employee> findByReportsTo(Long managerId);
+    @Query("SELECT e FROM Employee e WHERE e.reportsTo.id = :managerId")
+    List<Employee> findByReportsTo(@Param("managerId") Long managerId);
     
     Page<Employee> findByLastNameContainingIgnoreCase(String lastName, Pageable pageable);
     

@@ -35,6 +35,9 @@ public class GenreServiceImpl implements GenreService {
         return new TrackDto(
             track.getId(),
             track.getName(),
+            null, // AlbumDto
+            null, // MediaTypeDto
+            null, // GenreDto
             track.getComposer(),
             track.getMilliseconds(),
             track.getBytes(),

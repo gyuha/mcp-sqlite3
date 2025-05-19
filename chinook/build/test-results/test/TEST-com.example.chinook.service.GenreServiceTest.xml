@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.chinook.service.GenreServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-05-19T11:44:36" hostname="GYUHA-HOME-DESK" time="0.04">
+  <properties/>
+  <testcase name="createGenre_DuplicateName()" classname="com.example.chinook.service.GenreServiceTest" time="0.031"/>
+  <testcase name="getTopGenresByTrackCount_Success()" classname="com.example.chinook.service.GenreServiceTest" time="0.001"/>
+  <testcase name="updateGenre_Success()" classname="com.example.chinook.service.GenreServiceTest" time="0.001"/>
+  <testcase name="getAllGenres_Success()" classname="com.example.chinook.service.GenreServiceTest" time="0.001"/>
+  <testcase name="deleteGenre_WithTracks()" classname="com.example.chinook.service.GenreServiceTest" time="0.001"/>
+  <testcase name="getGenreWithTracks_Success()" classname="com.example.chinook.service.GenreServiceTest" time="0.001"/>
+  <testcase name="createGenre_Success()" classname="com.example.chinook.service.GenreServiceTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

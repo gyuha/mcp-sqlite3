@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.chinook.service.InvoiceServiceTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-05-19T11:44:36" hostname="GYUHA-HOME-DESK" time="0.081">
+  <properties/>
+  <testcase name="deleteInvoice_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.064"/>
+  <testcase name="createInvoice_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.004"/>
+  <testcase name="createInvoice_CustomerNotFound()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.002"/>
+  <testcase name="getInvoiceDetail_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.005"/>
+  <testcase name="getCustomerInvoices_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.002"/>
+  <testcase name="getAllInvoices_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.001"/>
+  <testcase name="updateInvoice_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.002"/>
+  <testcase name="calculateTotalSales_Success()" classname="com.example.chinook.service.InvoiceServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

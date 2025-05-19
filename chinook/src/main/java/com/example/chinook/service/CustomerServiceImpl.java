@@ -69,6 +69,15 @@ public class CustomerServiceImpl implements CustomerService {
             employee.getFirstName(),
             employee.getLastName(),
             employee.getTitle(),
+            null, // birthDate
+            null, // hireDate
+            null, // address
+            null, // city
+            null, // state
+            null, // country
+            null, // postalCode
+            null, // phone
+            null, // fax
             employee.getEmail()
         );
     }
@@ -76,6 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
     private InvoiceDto toInvoiceDto(Invoice invoice) {
         return new InvoiceDto(
             invoice.getId(),
+            null, // CustomerDto
             invoice.getInvoiceDate(),
             invoice.getBillingAddress(),
             invoice.getBillingCity(),

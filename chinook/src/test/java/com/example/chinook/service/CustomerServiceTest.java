@@ -57,6 +57,15 @@ class CustomerServiceTest {
             testEmployee.getFirstName(),
             testEmployee.getLastName(),
             testEmployee.getTitle(),
+            null, // birthDate
+            null, // hireDate
+            null, // address
+            null, // city
+            null, // state
+            null, // country
+            null, // postalCode
+            null, // phone
+            null, // fax
             testEmployee.getEmail()
         );
 
