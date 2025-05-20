@@ -14,9 +14,12 @@
 ## Technology stack：
 - Java 17
 - Spring Boot 3
-- gradle
-- Lombok
-- sqlite3
+- Gradle
+- Dependencies: 
+    - Spring Web
+    - Spring Data JPA
+    - Lombok
+    - sqlite3
 
 ----
 Application Logic Design：
