@@ -9,7 +9,7 @@
       "command": "npx",
       "args": ["-y", "mcp-shrimp-task-manager"],
       "env": {
-        "DATA_DIR": "D:\\workspace\\mcp-sqlite3\\chinook\\task-data",
+        "DATA_DIR": "D:\\workspace\\mcp-sqlite3\\task-data",
         "TEMPLATES_USE": "ko",
         "ENABLE_GUI": "true"
       }
