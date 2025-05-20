@@ -4,7 +4,7 @@
 
 
 ## 작업 폴더
-- working path : D:\workspace\mcp-sqlite3
+- working path : [D:\workspace\mcp-sqlite3]
 
 ## 작업 내용
 - 작업전에 shrimp-task-manager를 사용해서 plan을 작성 해 줘
@@ -17,6 +17,14 @@
     - sqlite3 데이터베이스에 데이터를 추가하는 API 엔드포인트 생성
 - next.js에서 사용자 UI 생성
 - 사용자 UI를 작성 하고 API와 연결
+
+## Technology stack：
+- Typescript
+- Next.js 15
+- React 19
+- Tailwind CSS
+- API
+   - SQLite3
 
 ## Mandatory MCP
 - use Context7 mcp
