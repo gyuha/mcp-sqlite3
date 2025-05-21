@@ -1,13 +1,15 @@
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 ## Goal
 - 데이터베이스에 저장된 내용을 기반으로 nextjs앱을 만들고 싶습니다
 
 
 ## 작업 폴더
-- working path : [D:\workspace\mcp-sqlite3]
+- working path : [/Users/gyuha/workspace/mcp-sqlite3/nextjs-app]
 
 ## 작업 내용
-- 작업전에 shrimp-task-manager를 사용해서 plan을 작성 해 줘
+- `database client` mcp를 사용해서 sqlite3 데이터베이스에 연결
+- 작업전에 `shrimp-task-manager` mcp를 사용해서 plan을 작성 해 줘
+   - `shrimp-task-manager` mcp를 사용해서 sqlite3 데이터베이스에 연결하는 API를 작성
+   - 통계에 사용할 API를 작성
 - 각 기능에 대한 UI를 작성
 - 각 기능에 대한 API를 작성
     - next.js 최신 버전으로 프로젝트 생성

@@ -1,0 +1,91 @@
+{
+  "tasks": [
+    {
+      "id": "d0ba3f56-e167-436b-a2ff-7173cf11aa7e",
+      "name": "프로젝트 초기 설정",
+      "description": "Next.js 15 프로젝트를 생성하고 필요한 의존성을 설치합니다.",
+      "notes": "프로젝트의 기초가 되는 중요한 작업입니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-21T03:33:34.169Z",
+      "updatedAt": "2025-05-21T03:34:25.137Z",
+      "implementationGuide": "1. create-next-app을 사용하여 Next.js 15 프로젝트 생성\n2. TypeScript 및 Tailwind CSS 설정\n3. better-sqlite3 및 기타 필요한 패키지 설치",
+      "verificationCriteria": "1. 프로젝트가 성공적으로 생성됨\n2. TypeScript 컴파일 오류 없음\n3. Tailwind CSS 정상 작동\n4. 필요한 모든 패키지가 설치됨",
+      "analysisResult": "프로젝트의 전체 목표는 Next.js와 SQLite3를 사용하여 데이터베이스 기반의 웹 애플리케이션을 구축하는 것입니다. 각 작업은 독립적으로 실행 가능하며, 명확한 입/출력 인터페이스를 가집니다.",
+      "summary": "Next.js 프로젝트가 성공적으로 설정되었습니다. TypeScript, Tailwind CSS가 설정되어 있고, better-sqlite3 및 관련 타입 패키지가 설치되었습니다.",
+      "completedAt": "2025-05-21T03:34:25.137Z"
+    },
+    {
+      "id": "19b887d3-b41a-4770-90b6-d7ec1c6d6d67",
+      "name": "데이터베이스 연결 설정",
+      "description": "SQLite3 데이터베이스 연결 및 기본 설정을 구현합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "d0ba3f56-e167-436b-a2ff-7173cf11aa7e"
+        }
+      ],
+      "createdAt": "2025-05-21T03:33:34.169Z",
+      "updatedAt": "2025-05-21T03:36:44.105Z",
+      "implementationGuide": "1. better-sqlite3를 사용하여 데이터베이스 연결 구현\n2. 데이터베이스 스키마 설계\n3. 데이터베이스 연결 유틸리티 함수 구현",
+      "verificationCriteria": "1. 데이터베이스 연결 성공\n2. 기본 쿼리 실행 가능\n3. 연결 오류 처리 구현",
+      "analysisResult": "프로젝트의 전체 목표는 Next.js와 SQLite3를 사용하여 데이터베이스 기반의 웹 애플리케이션을 구축하는 것입니다. 각 작업은 독립적으로 실행 가능하며, 명확한 입/출력 인터페이스를 가집니다.",
+      "summary": "데이터베이스 연결 설정이 성공적으로 완료되었습니다. better-sqlite3를 사용한 데이터베이스 연결을 구현했고, chinook 데이터베이스를 설치하여 테스트까지 완료했습니다. 데이터베이스 스키마와 타입이 정의되어 있고, API를 통한 데이터 접근도 성공적으로 테스트되었습니다.",
+      "completedAt": "2025-05-21T03:36:44.105Z"
+    },
+    {
+      "id": "41c7924f-d1b2-4f2d-8c20-af5f73069b94",
+      "name": "API 라우트 구현",
+      "description": "데이터베이스 CRUD 작업을 위한 API 엔드포인트를 구현합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "19b887d3-b41a-4770-90b6-d7ec1c6d6d67"
+        }
+      ],
+      "createdAt": "2025-05-21T03:33:34.169Z",
+      "updatedAt": "2025-05-21T03:38:42.439Z",
+      "implementationGuide": "1. RESTful API 엔드포인트 생성\n2. CRUD 작업 구현\n3. 오류 처리 및 응답 형식 표준화",
+      "verificationCriteria": "1. 모든 CRUD 작업이 정상 작동\n2. 적절한 오류 처리\n3. 일관된 응답 형식",
+      "analysisResult": "프로젝트의 전체 목표는 Next.js와 SQLite3를 사용하여 데이터베이스 기반의 웹 애플리케이션을 구축하는 것입니다. 각 작업은 독립적으로 실행 가능하며, 명확한 입/출력 인터페이스를 가집니다.",
+      "summary": "API 라우트 구현이 성공적으로 완료되었습니다. Artist, Album, Track에 대한 CRUD API가 모두 구현되어 있고, 각각의 API가 정상적으로 작동하는 것을 확인했습니다. 에러 처리와 응답 형식이 표준화되어 있으며, 데이터 무결성을 위한 검증도 구현되어 있습니다.",
+      "completedAt": "2025-05-21T03:38:42.438Z"
+    },
+    {
+      "id": "5fc25218-4204-45f4-8acf-6c2b9dc7c7b9",
+      "name": "UI 컴포넌트 구현",
+      "description": "데이터를 표시하고 관리하기 위한 UI 컴포넌트를 구현합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "41c7924f-d1b2-4f2d-8c20-af5f73069b94"
+        }
+      ],
+      "createdAt": "2025-05-21T03:33:34.169Z",
+      "updatedAt": "2025-05-21T03:40:44.761Z",
+      "implementationGuide": "1. 레이아웃 컴포넌트 구현\n2. 데이터 표시 컴포넌트 구현\n3. 데이터 입력 폼 구현",
+      "verificationCriteria": "1. 컴포넌트가 정상적으로 렌더링\n2. 반응형 디자인 적용\n3. 사용자 입력 처리 정상 작동",
+      "analysisResult": "프로젝트의 전체 목표는 Next.js와 SQLite3를 사용하여 데이터베이스 기반의 웹 애플리케이션을 구축하는 것입니다. 각 작업은 독립적으로 실행 가능하며, 명확한 입/출력 인터페이스를 가집니다.",
+      "summary": "UI 컴포넌트 구현이 성공적으로 완료되었습니다. 메인 페이지, 아티스트 목록, 앨범 목록, 앨범 상세 페이지가 모두 구현되어 있고 정상적으로 작동합니다. 반응형 디자인이 적용되어 있고, 로딩 상태와 에러 처리도 구현되어 있습니다.",
+      "completedAt": "2025-05-21T03:40:44.761Z"
+    },
+    {
+      "id": "08ad3779-3535-4741-b27d-ee0d15089524",
+      "name": "통합 테스트 및 오류 처리",
+      "description": "전체 애플리케이션의 통합 테스트와 오류 처리를 구현합니다.",
+      "status": "已完成",
+      "dependencies": [
+        {
+          "taskId": "5fc25218-4204-45f4-8acf-6c2b9dc7c7b9"
+        }
+      ],
+      "createdAt": "2025-05-21T03:33:34.169Z",
+      "updatedAt": "2025-05-21T03:43:12.688Z",
+      "implementationGuide": "1. API 엔드포인트 테스트\n2. UI 컴포넌트 테스트\n3. 오류 상황 테스트",
+      "verificationCriteria": "1. 모든 테스트 통과\n2. 오류 상황 적절히 처리\n3. 사용자 경험 검증",
+      "analysisResult": "프로젝트의 전체 목표는 Next.js와 SQLite3를 사용하여 데이터베이스 기반의 웹 애플리케이션을 구축하는 것입니다. 각 작업은 독립적으로 실행 가능하며, 명확한 입/출력 인터페이스를 가집니다.",
+      "summary": "통합 테스트와 오류 처리가 성공적으로 완료되었습니다. API 엔드포인트가 정상적으로 동작하며, UI 컴포넌트가 정상적으로 작동하고 오류 상황도 적절히 처리됩니다. 페이지 간 이동이 부드럽고, 데이터 로딩과 오류 상태가 사용자에게 잘 표시됩니다.",
+      "completedAt": "2025-05-21T03:43:12.687Z"
+    }
+  ]
+}
