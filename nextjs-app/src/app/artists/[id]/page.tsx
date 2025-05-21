@@ -35,7 +35,7 @@ export default function ArtistPage({ params }: { params: { id: string } }) {
   } = useQuery<ApiResponse<Album[]>>({
     queryKey: ['artist-albums', params.id],
     queryFn: async () => {
-      const response = await fetch(`/api/albums?artistId=${params.id}`);
+      const response = await fetch(`/api/artists/${params.id}/albums`);
       if (!response.ok) {
         throw new Error('Failed to fetch albums');
       }

@@ -13,8 +13,9 @@ export async function GET(request: NextRequest) {
 
     const albums = db.getConnection().prepare(`
       SELECT 
-        Album.AlbumId as id,
-        Album.Title as title,
+        Album.AlbumId,
+        Album.Title,
+        Album.ArtistId,
         Artist.Name as artistName,
         COUNT(Track.TrackId) as trackCount
       FROM Album
