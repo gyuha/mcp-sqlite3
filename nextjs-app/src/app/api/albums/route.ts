@@ -1,129 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { DatabaseManager } from '@/lib/db';
-import { createSuccessResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
+import { createApiResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
+import { Album, CountResult } from '@/types/database';
 
-interface AlbumRow {
-  AlbumId: number;
-  Title: string;
-  ArtistId: number;
-}
-
-// GET /api/albums
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
-    const search = searchParams.get('search') || '';
-    const sortBy = searchParams.get('sortBy') || 'Title';
-    const sortOrder = searchParams.get('sortOrder') || 'asc';
-    const artistId = searchParams.get('artistId');
-
+    const db = DatabaseManager.getInstance();
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') ?? '1');
+    const limit = parseInt(searchParams.get('limit') ?? '10');
     const offset = (page - 1) * limit;
 
-    const db = DatabaseManager.getInstance();
-    const dbConnection = db.getConnection();
-
-    // 서브쿼리를 사용하여 트랙 정보를 미리 계산
-    let sql = `
+    const albums = db.getConnection().prepare(`
       SELECT 
-        a.*,
-        ar.Name as ArtistName,
-        (
-          SELECT COUNT(*)
-          FROM Track t
-          WHERE t.AlbumId = a.AlbumId
-        ) as TrackCount,
-        (
-          SELECT SUM(Milliseconds)
-          FROM Track t
-          WHERE t.AlbumId = a.AlbumId
-        ) as TotalDuration
-      FROM Album a
-      LEFT JOIN Artist ar ON a.ArtistId = ar.ArtistId
-      WHERE 1=1
-    `;
+        Album.AlbumId as id,
+        Album.Title as title,
+        Artist.Name as artistName,
+        COUNT(Track.TrackId) as trackCount
+      FROM Album
+      JOIN Artist ON Album.ArtistId = Artist.ArtistId
+      LEFT JOIN Track ON Album.AlbumId = Track.AlbumId
+      GROUP BY Album.AlbumId
+      LIMIT ? OFFSET ?
+    `).all(limit, offset) as Album[];
 
-    // 전체 레코드 수를 가져오는 쿼리
-    let countSql = `
-      SELECT COUNT(*) as total
-      FROM Album a
-      LEFT JOIN Artist ar ON a.ArtistId = ar.ArtistId
-      WHERE 1=1
-    `;
+    const countResult = db.getConnection().prepare(`
+      SELECT COUNT(*) as count FROM Album
+    `).get() as CountResult;
 
-    const params: (string | number)[] = [];
+    const totalCount = countResult.count;
 
-    if (search) {
-      sql += ` AND (a.Title LIKE ? OR ar.Name LIKE ?)`;
-      countSql += ` AND (a.Title LIKE ? OR ar.Name LIKE ?)`;
-      params.push(`%${search}%`, `%${search}%`);
-    }
-
-    if (artistId) {
-      sql += ` AND a.ArtistId = ?`;
-      countSql += ` AND a.ArtistId = ?`;
-      params.push(artistId);
-    }
-
-    // 정렬 추가
-    sql += ` ORDER BY ${sortBy} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
-
-    // 페이징 추가
-    sql += ` LIMIT ? OFFSET ?`;
-    const queryParams = [...params];
-    const countQueryParams = [...params];
-    queryParams.push(limit, offset);
-
-    const countStmt = dbConnection.prepare(countSql);
-    const countResult = countStmt.get(...countQueryParams) as { total: number };
-    const total = countResult.total;
-    
-    const stmt = dbConnection.prepare(sql);
-    const items = stmt.all(...queryParams);
-
-    const totalPages = Math.ceil(total / limit);
-    const hasNextPage = page < totalPages;
-    const hasPreviousPage = page > 1;
-
-    return NextResponse.json(createSuccessResponse({
-      items,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages,
-        hasNextPage,
-        hasPreviousPage
-      }
-    }));
+    return createApiResponse(albums, {
+      totalCount,
+      currentPage: page,
+      pageCount: Math.ceil(totalCount / limit)
+    });
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// POST /api/albums
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await req.json();
-    const { Title, ArtistId } = body;
-
-    if (!Title || !ArtistId) {
-      return NextResponse.json(createErrorResponse('Title and ArtistId are required', 400));
+    const { title, artistId } = await request.json();
+    
+    if (!title || !artistId) {
+      return createErrorResponse('제목과 아티스트 ID는 필수입니다.', 400);
     }
 
     const db = DatabaseManager.getInstance();
-    const dbConnection = db.getConnection();
+    const result = db.getConnection().prepare(`
+      INSERT INTO Album (Title, ArtistId) VALUES (?, ?)
+    `).run(title, artistId);
 
-    const stmt = dbConnection.prepare(
-      'INSERT INTO Album (Title, ArtistId) VALUES (?, ?)'
-    );
-    const result = stmt.run(Title, ArtistId);
-    
-    const album = dbConnection.prepare('SELECT * FROM Album WHERE AlbumId = ?')
-      .get(result.lastInsertRowid) as AlbumRow;
+    const newAlbum = db.getConnection().prepare(`
+      SELECT AlbumId as id, Title as title, ArtistId as artistId
+      FROM Album WHERE AlbumId = ?
+    `).get(result.lastInsertRowid) as Album;
 
-    return NextResponse.json(createSuccessResponse(album, 'Album created successfully'));
+    return createApiResponse(newAlbum);
   } catch (error) {
     return handleApiError(error);
   }
@@ -134,14 +69,14 @@ export async function PUT(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get('id');
     if (!id) {
-      return NextResponse.json(createErrorResponse('Album ID is required', 400));
+      return createErrorResponse('Album ID is required', 400);
     }
 
     const body = await req.json();
     const { Title, ArtistId } = body;
 
     if (!Title && !ArtistId) {
-      return NextResponse.json(createErrorResponse('At least one field to update is required', 400));
+      return createErrorResponse('At least one field to update is required', 400);
     }
 
     const db = DatabaseManager.getInstance();
@@ -166,13 +101,13 @@ export async function PUT(req: NextRequest) {
     const result = stmt.run(...params);
 
     if (result.changes === 0) {
-      return NextResponse.json(createErrorResponse('Album not found', 404));
+      return createErrorResponse('Album not found', 404);
     }
 
     const album = dbConnection.prepare('SELECT * FROM Album WHERE AlbumId = ?')
       .get(id) as AlbumRow;
 
-    return NextResponse.json(createSuccessResponse(album, 'Album updated successfully'));
+    return createApiResponse(album, 'Album updated successfully');
   } catch (error) {
     return handleApiError(error);
   }
@@ -183,7 +118,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get('id');
     if (!id) {
-      return NextResponse.json(createErrorResponse('Album ID is required', 400));
+      return createErrorResponse('Album ID is required', 400);
     }
 
     const db = DatabaseManager.getInstance();
@@ -193,10 +128,10 @@ export async function DELETE(req: NextRequest) {
     const result = stmt.run(id);
     
     if (result.changes === 0) {
-      return NextResponse.json(createErrorResponse('Album not found', 404));
+      return createErrorResponse('Album not found', 404);
     }
 
-    return NextResponse.json(createSuccessResponse(null, 'Album deleted successfully'));
+    return createApiResponse(null, 'Album deleted successfully');
   } catch (error) {
     return handleApiError(error);
   }

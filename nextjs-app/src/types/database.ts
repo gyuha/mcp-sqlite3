@@ -1,15 +1,17 @@
+import type { Statement, RunResult as SqliteRunResult } from 'better-sqlite3';
+
 export interface Album {
   AlbumId: number;
   Title: string;
   ArtistId: number;
-  ArtistName?: string;
-  TrackCount?: number;
-  TotalDuration?: number;
+  artistName?: string;
+  trackCount?: number;
 }
 
 export interface Artist {
   ArtistId: number;
   Name: string;
+  albumCount?: number;
 }
 
 export interface Track {
@@ -112,7 +114,6 @@ export interface PaginatedResult<T> {
   items: T[];
   total: number;
   page: number;
-  limit: number;
   totalPages: number;
 }
 
@@ -144,3 +145,14 @@ export interface GenreStats {
   trackCount: number;
   totalDuration: number;
 }
+
+export interface DatabaseRecord {
+  count: number;
+}
+
+export interface CountResult {
+  count: number;
+}
+
+export type DBStatement<T> = T[] | T;
+export type DBRunResult = { lastInsertRowid: number | bigint; changes: number };

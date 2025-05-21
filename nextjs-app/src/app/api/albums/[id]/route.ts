@@ -1,66 +1,98 @@
 import { NextRequest } from 'next/server';
-import * as db from '@/lib/db';
-import { Album, Track, Artist } from '@/types/database';
-import { createSuccessResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
+import { DatabaseManager } from '@/lib/db';
+import {
+  createApiResponse,
+  createErrorResponse,
+  createSuccessMessage,
+  handleApiError
+} from '@/lib/api-utils';
+import { Album } from '@/types/database';
 
-// GET /api/albums/[id]
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
-    db.connect();
-
-    // 앨범, 아티스트 정보 및 통계 조회
-    const albumInfo = db.queryOne<Album & {
-      ArtistName: string;
-      TrackCount: number;
-      TotalDuration: number;
-      TotalPrice: number;
-    }>(`
-      SELECT 
-        a.*,
-        ar.Name as ArtistName,
-        COUNT(t.TrackId) as TrackCount,
-        SUM(t.Milliseconds) as TotalDuration,
-        SUM(t.UnitPrice) as TotalPrice
-      FROM Album a
-      LEFT JOIN Artist ar ON a.ArtistId = ar.ArtistId
-      LEFT JOIN Track t ON a.AlbumId = t.AlbumId
-      WHERE a.AlbumId = ?
-      GROUP BY a.AlbumId
-    `, [id]);
-
-    if (!albumInfo) {
-      return createErrorResponse('Album not found', 404);
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return createErrorResponse('유효하지 않은 ID입니다.', 400);
     }
 
-    // 앨범의 트랙 목록 조회
-    const tracks = db.query<Track & { GenreName: string; MediaTypeName: string }>(`
+    const db = DatabaseManager.getInstance();
+    const album = db.getConnection().prepare(`
       SELECT 
-        t.*,
-        g.Name as GenreName,
-        m.Name as MediaTypeName
-      FROM Track t
-      LEFT JOIN Genre g ON t.GenreId = g.GenreId
-      LEFT JOIN MediaType m ON t.MediaTypeId = m.MediaTypeId
-      WHERE t.AlbumId = ?
-      ORDER BY t.TrackId
-    `, [id]);
+        Album.AlbumId as id,
+        Album.Title as title,
+        Artist.Name as artistName,
+        Artist.ArtistId as artistId,
+        COUNT(Track.TrackId) as trackCount
+      FROM Album
+      JOIN Artist ON Album.ArtistId = Artist.ArtistId
+      LEFT JOIN Track ON Album.AlbumId = Track.AlbumId
+      WHERE Album.AlbumId = ?
+      GROUP BY Album.AlbumId
+    `).get(id) as Album | undefined;
 
-    // 아티스트의 다른 앨범 조회
-    const otherAlbums = db.query<Album>(`
-      SELECT * FROM Album
-      WHERE ArtistId = ? AND AlbumId != ?
-      LIMIT 5
-    `, [albumInfo.ArtistId, id]);
+    if (!album) {
+      return createErrorResponse('앨범을 찾을 수 없습니다.', 404);
+    }
 
-    return createSuccessResponse({
-      ...albumInfo,
-      tracks,
-      otherAlbums,
-    });
+    return createApiResponse(album);
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return createErrorResponse('유효하지 않은 ID입니다.', 400);
+    }
+
+    const { title, artistId } = await request.json();
+    if (!title || !artistId) {
+      return createErrorResponse('제목과 아티스트 ID는 필수입니다.', 400);
+    }
+
+    const db = DatabaseManager.getInstance();
+    const result = db.getConnection().prepare(`
+      UPDATE Album SET Title = ?, ArtistId = ? WHERE AlbumId = ?
+    `).run(title, artistId, id);
+
+    if (result.changes === 0) {
+      return createErrorResponse('앨범을 찾을 수 없습니다.', 404);
+    }
+
+    return createSuccessMessage('앨범이 성공적으로 업데이트되었습니다.');
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const id = parseInt(params.id);
+    if (isNaN(id)) {
+      return createErrorResponse('유효하지 않은 ID입니다.', 400);
+    }
+
+    const db = DatabaseManager.getInstance();
+    const result = db.getConnection().prepare(`
+      DELETE FROM Album WHERE AlbumId = ?
+    `).run(id);
+
+    if (result.changes === 0) {
+      return createErrorResponse('앨범을 찾을 수 없습니다.', 404);
+    }
+
+    return createSuccessMessage('앨범이 성공적으로 삭제되었습니다.');
   } catch (error) {
     return handleApiError(error);
   }

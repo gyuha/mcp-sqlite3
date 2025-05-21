@@ -1,21 +1,44 @@
 import { NextResponse } from 'next/server';
 
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
+export interface ApiResponseMetadata {
+  totalCount?: number;
+  pageCount?: number;
+  currentPage?: number;
   message?: string;
 }
 
-export function createSuccessResponse<T>(data: T, message?: string): NextResponse<ApiResponse<T>> {
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  metadata?: ApiResponseMetadata;
+}
+
+export function createApiResponse<T>(
+  data: T,
+  metadata?: ApiResponseMetadata
+): NextResponse<ApiResponse<T>> {
   return NextResponse.json({
     success: true,
     data,
-    message
+    metadata
   });
 }
 
-export function createErrorResponse(error: string, status: number = 500): NextResponse<ApiResponse> {
+export function createSuccessMessage(
+  message: string
+): NextResponse<ApiResponse<null>> {
+  return NextResponse.json({
+    success: true,
+    data: null,
+    metadata: { message }
+  });
+}
+
+export function createErrorResponse(
+  error: string,
+  status: number = 500
+): NextResponse<ApiResponse<never>> {
   return NextResponse.json(
     {
       success: false,
@@ -25,12 +48,8 @@ export function createErrorResponse(error: string, status: number = 500): NextRe
   );
 }
 
-export function handleApiError(error: unknown): NextResponse<ApiResponse> {
+export function handleApiError(error: unknown): NextResponse {
   console.error('API Error:', error);
-  
-  if (error instanceof Error) {
-    return createErrorResponse(error.message);
-  }
-  
-  return createErrorResponse('An unexpected error occurred');
+  const message = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
+  return createErrorResponse(message);
 }

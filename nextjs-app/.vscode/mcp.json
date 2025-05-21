@@ -1,0 +1,22 @@
+{
+    "servers": {
+        "Context7": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@upstash/context7-mcp@latest"]
+        },
+        "shrimp-task-manager": {
+            "command": "npx",
+            "args": ["-y", "mcp-shrimp-task-manager"],
+            "env": {
+                "DATA_DIR": "/Users/gyuha/workspace/mcp-sqlite3/task-data",
+                "TEMPLATES_USE": "ko",
+                "ENABLE_GUI": "true"
+            }
+        },
+        "playwright": {
+            "command": "npx",
+            "args": ["@executeautomation/playwright-mcp-server"]
+        }
+    }
+}

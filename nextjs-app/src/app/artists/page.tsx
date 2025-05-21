@@ -1,20 +1,22 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { Artist } from '@/types/database';
+import { ApiResponse } from '@/lib/api-utils';
 import LoadingSpinner from '@/components/ui/loading';
 import ErrorMessage from '@/components/ui/error';
+import { Card } from '@/components/ui/Card';
 
 export default function ArtistsPage() {
-  const { data: artists, isLoading, error } = useQuery<Artist[]>({
+  const { data, isLoading, error } = useQuery<ApiResponse<Artist[]>>({
     queryKey: ['artists'],
     queryFn: async () => {
       const response = await fetch('/api/artists');
       if (!response.ok) {
         throw new Error('Failed to fetch artists');
       }
-      const data = await response.json();
-      return data.data.items;
+      return response.json();
     },
   });
 
@@ -36,32 +38,38 @@ export default function ArtistsPage() {
     );
   }
 
+  const artists = data?.data ?? [];
+
   return (
-    <div className="space-y-6">
-      <div>
+    <main className="container mx-auto p-6">
+      <div className="mb-8">
         <h1 className="text-3xl font-bold">아티스트</h1>
-        <p className="text-gray-500">등록된 모든 아티스트 목록입니다.</p>
+        <p className="text-gray-500 mt-2">등록된 모든 아티스트 목록입니다.</p>
       </div>
       
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {artists?.map((artist) => (
-          <div
-            key={artist.ArtistId}
-            className="block p-6 bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors"
+        {artists.map((artist) => (
+          <Link 
+            key={artist.ArtistId} 
+            href={`/artists/${artist.ArtistId}`}
           >
-            <h2 className="text-xl font-semibold">{artist.Name}</h2>
-            {artist.albumCount !== undefined && (
-              <p className="text-gray-500 mt-2">앨범 {artist.albumCount}개</p>
-            )}
-            <a
-              href={`/artists/${artist.ArtistId}`}
-              className="text-blue-600 hover:underline mt-4 inline-block"
-            >
-              자세히 보기 →
-            </a>
-          </div>
+            <Card className="h-full hover:border-blue-500 transition-colors">
+              <div className="p-6">
+                <h2 className="text-xl font-semibold mb-2">{artist.Name}</h2>
+                <p className="text-gray-600">
+                  {artist.albumCount ?? 0} 앨범
+                </p>
+              </div>
+            </Card>
+          </Link>
         ))}
       </div>
-    </div>
+
+      {artists.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500">등록된 아티스트가 없습니다.</p>
+        </div>
+      )}
+    </main>
   );
 }

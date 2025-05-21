@@ -1,69 +1,85 @@
 import { NextRequest } from 'next/server';
-import * as db from '@/lib/db';
+import { DatabaseManager } from '@/lib/db';
 import { Artist } from '@/types/database';
-import { createSuccessResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
+import { createApiResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
 
-// GET /api/artists
 export async function GET(req: NextRequest) {
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '10', 10);
-    const search = searchParams.get('search') || '';
-    const sortBy = searchParams.get('sortBy') || 'Name';
-    const sortOrder = searchParams.get('sortOrder') || 'asc';
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get('page') ?? '1');
+    const limit = parseInt(searchParams.get('limit') ?? '10');
+    const search = searchParams.get('search') ?? '';
+    const offset = (page - 1) * limit;
 
-    db.connect();
+    const db = DatabaseManager.getInstance();
+    
+    // 검색 조건이 있는 경우와 없는 경우에 따라 쿼리 분기
+    const baseQuery = `
+      SELECT 
+        Artist.ArtistId,
+        Artist.Name,
+        COUNT(Album.AlbumId) as albumCount
+      FROM Artist
+      LEFT JOIN Album ON Artist.ArtistId = Album.ArtistId
+    `;
 
-    let sql = 'SELECT * FROM Artist';
-    const params: (string | number)[] = [];
+    const whereClause = search ? 'WHERE Artist.Name LIKE ?' : '';
+    const groupBy = 'GROUP BY Artist.ArtistId';
+    const orderBy = 'ORDER BY Artist.Name ASC';
+    const limitClause = 'LIMIT ? OFFSET ?';
 
-    if (search) {
-      sql += ' WHERE Name LIKE ?';
-      params.push(`%${search}%`);
-    }
+    const query = [baseQuery, whereClause, groupBy, orderBy, limitClause]
+      .filter(Boolean)
+      .join(' ');
 
-    sql += ` ORDER BY ${sortBy} ${sortOrder.toUpperCase()}`;
+    const params = search 
+      ? [`%${search}%`, limit, offset]
+      : [limit, offset];
 
-    const result = db.queryWithPagination<Artist>(sql, params, { page, limit });
+    const artists = db.getConnection()
+      .prepare(query)
+      .all(...params) as Artist[];
 
-    // 각 아티스트의 앨범 수를 조회
-    const artistIds = result.items.map(artist => artist.ArtistId);
-    if (artistIds.length > 0) {
-      const albumCounts = db.query<{ ArtistId: number; count: number }>(
-        `SELECT ArtistId, COUNT(*) as count 
-         FROM Album 
-         WHERE ArtistId IN (${artistIds.join(',')})
-         GROUP BY ArtistId`
-      );
+    // 총 레코드 수 조회
+    const countQuery = `
+      SELECT COUNT(*) as count 
+      FROM Artist 
+      ${whereClause}
+    `;
 
-      result.items = result.items.map(artist => ({
-        ...artist,
-        albumCount: albumCounts.find(count => count.ArtistId === artist.ArtistId)?.count || 0,
-      }));
-    }
+    const countParams = search ? [`%${search}%`] : [];
+    const { count } = db.getConnection()
+      .prepare(countQuery)
+      .get(...countParams) as { count: number };
 
-    return createSuccessResponse(result);
+    return createApiResponse(artists, {
+      totalCount: count,
+      currentPage: page,
+      pageCount: Math.ceil(count / limit)
+    });
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// POST /api/artists
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { Name } = body;
-
+    const { Name } = await req.json();
+    
     if (!Name) {
-      return createErrorResponse('Artist name is required', 400);
+      return createErrorResponse('아티스트 이름은 필수입니다.', 400);
     }
 
-    db.connect();
-    const artistId = db.insert('Artist', { Name });
-    
-    const artist = db.queryOne<Artist>('SELECT * FROM Artist WHERE ArtistId = ?', [artistId]);
-    return createSuccessResponse(artist, 'Artist created successfully');
+    const db = DatabaseManager.getInstance();
+    const result = db.getConnection()
+      .prepare('INSERT INTO Artist (Name) VALUES (?)')
+      .run(Name);
+
+    const newArtist = db.getConnection()
+      .prepare('SELECT ArtistId, Name FROM Artist WHERE ArtistId = ?')
+      .get(result.lastInsertRowid) as Artist;
+
+    return createApiResponse(newArtist);
   } catch (error) {
     return handleApiError(error);
   }
@@ -84,15 +100,20 @@ export async function PUT(req: NextRequest) {
       return createErrorResponse('Artist name is required', 400);
     }
 
-    db.connect();
-    const changes = db.update('Artist', { Name }, 'ArtistId = ?', [id]);
+    const db = DatabaseManager.getInstance();
+    const changes = db.getConnection()
+      .prepare('UPDATE Artist SET Name = ? WHERE ArtistId = ?')
+      .run(Name, id);
     
-    if (changes === 0) {
+    if (changes.changes === 0) {
       return createErrorResponse('Artist not found', 404);
     }
 
-    const artist = db.queryOne<Artist>('SELECT * FROM Artist WHERE ArtistId = ?', [id]);
-    return createSuccessResponse(artist, 'Artist updated successfully');
+    const artist = db.getConnection()
+      .prepare('SELECT ArtistId, Name FROM Artist WHERE ArtistId = ?')
+      .get(id) as Artist;
+
+    return createApiResponse(artist, 'Artist updated successfully');
   } catch (error) {
     return handleApiError(error);
   }
@@ -106,22 +127,26 @@ export async function DELETE(req: NextRequest) {
       return createErrorResponse('Artist ID is required', 400);
     }
 
-    db.connect();
+    const db = DatabaseManager.getInstance();
     
     // 먼저 아티스트와 관련된 앨범이 있는지 확인
-    const albums = db.query<{ count: number }>('SELECT COUNT(*) as count FROM Album WHERE ArtistId = ?', [id]);
+    const albums = db.getConnection()
+      .prepare('SELECT COUNT(*) as count FROM Album WHERE ArtistId = ?')
+      .get(id) as { count: number };
     
-    if (albums[0]?.count > 0) {
+    if (albums.count > 0) {
       return createErrorResponse('Cannot delete artist with existing albums', 400);
     }
 
-    const changes = db.remove('Artist', 'ArtistId = ?', [id]);
+    const changes = db.getConnection()
+      .prepare('DELETE FROM Artist WHERE ArtistId = ?')
+      .run(id);
     
-    if (changes === 0) {
+    if (changes.changes === 0) {
       return createErrorResponse('Artist not found', 404);
     }
 
-    return createSuccessResponse(null, 'Artist deleted successfully');
+    return createApiResponse(null, 'Artist deleted successfully');
   } catch (error) {
     return handleApiError(error);
   }

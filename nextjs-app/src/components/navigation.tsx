@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: '홈' },
-  { href: '/artists', label: '아티스트' },
   { href: '/albums', label: '앨범' },
-  { href: '/dashboard', label: '통계' },
+  { href: '/artists', label: '아티스트' },
+  { href: '/stats', label: '통계' },
 ];
 
 export function Navigation() {

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { ApiResponse, ApiResponseMetadata } from './api-utils';
+import { Album, Artist, Track } from '@/types/database';
 
 // API 응답 타입
 export type ApiResponse<T> = {
@@ -183,3 +185,104 @@ export const trackSchema = z.object({
 export type AlbumData = z.infer<typeof albumSchema>;
 export type ArtistData = z.infer<typeof artistSchema>;
 export type TrackData = z.infer<typeof trackSchema>;
+
+type RequestParams = Record<string, string | number>;
+
+interface FetchOptions extends RequestInit {
+  params?: RequestParams;
+}
+
+async function fetchApi<T>(
+  endpoint: string,
+  options: FetchOptions = {}
+): Promise<ApiResponse<T>> {
+  const { params, ...init } = options;
+  
+  let url = `/api${endpoint}`;
+  if (params) {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      searchParams.append(key, String(value));
+    });
+    url += `?${searchParams.toString()}`;
+  }
+
+  const response = await fetch(url, init);
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || '알 수 없는 오류가 발생했습니다.');
+  }
+
+  return data;
+}
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+function toPaginationParams(params?: PaginationParams): RequestParams | undefined {
+  if (!params) return undefined;
+  return Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined)
+  );
+}
+
+export const albumsApi = {
+  getAll: (params?: PaginationParams) =>
+    fetchApi<Album[]>('/albums', { params: toPaginationParams(params) }),
+
+  getById: (id: number) =>
+    fetchApi<Album>(`/albums/${id}`),
+
+  create: (album: Omit<Album, 'id'>) =>
+    fetchApi<Album>('/albums', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(album),
+    }),
+
+  update: (id: number, album: Partial<Album>) =>
+    fetchApi<null>(`/albums/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(album),
+    }),
+
+  delete: (id: number) =>
+    fetchApi<null>(`/albums/${id}`, { method: 'DELETE' }),
+};
+
+export const artistsApi = {
+  getAll: (params?: PaginationParams) =>
+    fetchApi<Artist[]>('/artists', { params: toPaginationParams(params) }),
+
+  getById: (id: number) =>
+    fetchApi<Artist>(`/artists/${id}`),
+
+  getAlbums: (id: number, params?: PaginationParams) =>
+    fetchApi<Album[]>(`/artists/${id}/albums`, { params: toPaginationParams(params) }),
+};
+
+export const tracksApi = {
+  getAll: (params?: PaginationParams) =>
+    fetchApi<Track[]>('/tracks', { params: toPaginationParams(params) }),
+
+  getByAlbum: (albumId: number, params?: PaginationParams) =>
+    fetchApi<Track[]>(`/albums/${albumId}/tracks`, { params: toPaginationParams(params) }),
+};
+
+export interface StatsOverview {
+  totalAlbums: number;
+  totalArtists: number;
+  totalTracks: number;
+  avgTracksPerAlbum: number;
+  topGenres: Array<{ name: string; count: number }>;
+  topArtists: Array<{ name: string; albumCount: number }>;
+}
+
+export const statsApi = {
+  getOverview: () =>
+    fetchApi<StatsOverview>('/stats'),
+};
