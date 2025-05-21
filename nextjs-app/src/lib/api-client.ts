@@ -145,9 +145,9 @@ export interface Album {
 }
 
 export interface Artist {
-  id: string;
-  name: string;
-  country: string;
+  ArtistId: number;
+  Name: string;
+  albumCount?: number;
 }
 
 export interface Track {
@@ -167,9 +167,9 @@ export const albumSchema = z.object({
 
 // 아티스트 스키마 검증
 export const artistSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  country: z.string(),
+  ArtistId: z.number(),
+  Name: z.string(),
+  albumCount: z.number().optional()
 });
 
 // 트랙 스키마 검증

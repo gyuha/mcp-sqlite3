@@ -7,8 +7,8 @@ export function useArtists() {
   return useQuery({
     queryKey: ['artists'],
     queryFn: async () => {
-      const response = await apiClient.get<{ data: Artist[] }>('/artists');
-      return response.data;
+      const response = await apiClient.get<{ items: Artist[] }>('/artists');
+      return response.items;
     },
   });
 }
@@ -31,8 +31,8 @@ export function useAlbums() {
   return useQuery({
     queryKey: ['albums'],
     queryFn: async () => {
-      const response = await apiClient.get<{ data: AlbumResponse[] }>('/albums');
-      return response.data;
+      const response = await apiClient.get<{ data: { items: AlbumResponse[] } }>('/albums');
+      return response.data.items;
     },
   });
 }

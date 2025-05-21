@@ -3,7 +3,7 @@ import { Album, Artist, Track } from '@/types/database';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 
 async function getAlbum(id: string) {
-  const res = await fetch(`http://localhost:3000/api/albums?id=${id}`, {
+  const res = await fetch(`http://localhost:3000/api/albums/${id}`, {
     cache: 'no-store'
   });
   

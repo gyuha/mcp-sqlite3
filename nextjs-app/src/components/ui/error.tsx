@@ -2,10 +2,11 @@
 
 interface ErrorMessageProps {
   message?: string;
+  error?: Error;
   retry?: () => void;
 }
 
-export default function ErrorMessage({ message = '오류가 발생했습니다.', retry }: ErrorMessageProps) {
+export default function ErrorMessage({ message = '오류가 발생했습니다.', error, retry }: ErrorMessageProps) {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="text-red-500 mb-4">
@@ -25,6 +26,7 @@ export default function ErrorMessage({ message = '오류가 발생했습니다.'
         </svg>
       </div>
       <p className="text-gray-600 mb-4">{message}</p>
+      {error && <p className="text-sm text-gray-500 mb-4">{error.message}</p>}
       {retry && (
         <button
           onClick={retry}

@@ -3,9 +3,10 @@ import path from 'path';
 import { PaginationParams, PaginatedResult } from '../types/database';
 
 // 데이터베이스 연결 관리를 위한 클래스
-class DatabaseManager {
+export class DatabaseManager {
   private static instance: DatabaseManager;
   private db: Database.Database | null = null;
+  private isInitialized = false;
 
   private constructor() {}
 
@@ -16,23 +17,42 @@ class DatabaseManager {
     return DatabaseManager.instance;
   }
 
-  public getConnection(dbPath?: string): Database.Database {
-    if (!this.db) {
-      const defaultPath = dbPath || path.join(process.cwd(), '../../Chinook.db');
-      console.log('Database path:', defaultPath);
-      
-      try {
-        this.db = new Database(defaultPath, { readonly: false });
-        
-        // 데이터베이스 설정
-        this.db.pragma('journal_mode = WAL'); // Write Ahead Logging 모드 활성화
-        this.db.pragma('foreign_keys = ON'); // 외래 키 제약 조건 활성화
-      } catch (error) {
-        console.error('Failed to connect to database:', error);
-        throw error;
-      }
+  public getConnection(): Database.Database {
+    if (!this.db || !this.isInitialized) {
+      this.initialize();
     }
-    return this.db;
+    return this.db!;
+  }
+
+  private initialize(): void {
+    if (this.isInitialized) {
+      return;
+    }
+
+    const defaultPath = path.join(process.cwd(), 'chinook.db');
+    console.log('Database path:', defaultPath);
+    
+    try {
+      this.db = new Database(defaultPath, { 
+        readonly: false,
+        fileMustExist: true // 파일이 없으면 오류를 발생시킵니다.
+      });
+      
+      // 데이터베이스 설정
+      this.db.pragma('journal_mode = WAL'); // Write Ahead Logging 모드 활성화
+      this.db.pragma('foreign_keys = ON'); // 외래 키 제약 조건 활성화
+
+      // 데이터베이스 연결 테스트
+      const test = this.db.prepare('SELECT 1').get();
+      if (!test) {
+        throw new Error('Database connection test failed');
+      }
+
+      this.isInitialized = true;
+    } catch (error) {
+      console.error('Failed to connect to database:', error);
+      throw error;
+    }
   }
 
   public closeConnection(): void {
@@ -55,8 +75,8 @@ function getDb(): Database.Database {
  * @param dbPath 데이터베이스 파일 경로 (선택적)
  * @returns Database 인스턴스
  */
-export function connect(dbPath?: string): Database.Database {
-  return DatabaseManager.getInstance().getConnection(dbPath);
+export function connect(): Database.Database {
+  return DatabaseManager.getInstance().getConnection();
 }
 
 /**

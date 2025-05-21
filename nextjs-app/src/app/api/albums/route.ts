@@ -50,14 +50,35 @@ export async function GET(req: NextRequest) {
 
     sql += ' GROUP BY a.AlbumId';
     sql += ` ORDER BY ${sortBy} ${sortOrder.toUpperCase()}`;
+    sql += ` LIMIT ? OFFSET ?`;
+    params.push(limit, (page - 1) * limit);
 
-    const result = db.queryWithPagination<AlbumRow & {
+    const dbInstance = db.DatabaseManager.getInstance();
+    const dbConnection = dbInstance.getConnection();
+
+    const stmt = dbConnection.prepare(sql);
+    const albums = stmt.all(...params) as (AlbumRow & {
       ArtistName: string;
       TrackCount: number;
       TotalDuration: number;
-    }>(sql, params, { page, limit });
+    })[];
+    
+    const totalCountStmt = dbConnection.prepare(`
+      SELECT COUNT(DISTINCT a.AlbumId) as total 
+      FROM Album a
+      ${conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : ''}
+    `);
+    const { total } = totalCountStmt.get(...params.slice(0, -2)) as { total: number };
 
-    return createSuccessResponse(result);
+    return createSuccessResponse({
+      items: albums,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
   } catch (error) {
     return handleApiError(error);
   }

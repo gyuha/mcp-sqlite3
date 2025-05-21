@@ -26,7 +26,7 @@ async function getArtistAlbums(artistId: string) {
   }
   
   const data = await res.json();
-  return data.data as Album[];
+  return data.data.items as Album[];
 }
 
 export default async function ArtistPage({
