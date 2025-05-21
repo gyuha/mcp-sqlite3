@@ -2,6 +2,9 @@ export interface Album {
   AlbumId: number;
   Title: string;
   ArtistId: number;
+  ArtistName?: string;
+  TrackCount?: number;
+  TotalDuration?: number;
 }
 
 export interface Artist {

@@ -1,5 +1,5 @@
-import { NextRequest } from 'next/server';
-import * as db from '@/lib/db';
+import { NextRequest, NextResponse } from 'next/server';
+import { DatabaseManager } from '@/lib/db';
 import { createSuccessResponse, createErrorResponse, handleApiError } from '@/lib/api-utils';
 
 interface AlbumRow {
@@ -19,66 +19,84 @@ export async function GET(req: NextRequest) {
     const sortOrder = searchParams.get('sortOrder') || 'asc';
     const artistId = searchParams.get('artistId');
 
-    db.connect();
+    const offset = (page - 1) * limit;
 
+    const db = DatabaseManager.getInstance();
+    const dbConnection = db.getConnection();
+
+    // 서브쿼리를 사용하여 트랙 정보를 미리 계산
     let sql = `
       SELECT 
         a.*,
         ar.Name as ArtistName,
-        COUNT(t.TrackId) as TrackCount,
-        SUM(t.Milliseconds) as TotalDuration
+        (
+          SELECT COUNT(*)
+          FROM Track t
+          WHERE t.AlbumId = a.AlbumId
+        ) as TrackCount,
+        (
+          SELECT SUM(Milliseconds)
+          FROM Track t
+          WHERE t.AlbumId = a.AlbumId
+        ) as TotalDuration
       FROM Album a
       LEFT JOIN Artist ar ON a.ArtistId = ar.ArtistId
-      LEFT JOIN Track t ON a.AlbumId = t.AlbumId
+      WHERE 1=1
+    `;
+
+    // 전체 레코드 수를 가져오는 쿼리
+    let countSql = `
+      SELECT COUNT(*) as total
+      FROM Album a
+      LEFT JOIN Artist ar ON a.ArtistId = ar.ArtistId
+      WHERE 1=1
     `;
 
     const params: (string | number)[] = [];
 
-    const conditions: string[] = [];
     if (search) {
-      conditions.push('a.Title LIKE ?');
-      params.push(`%${search}%`);
+      sql += ` AND (a.Title LIKE ? OR ar.Name LIKE ?)`;
+      countSql += ` AND (a.Title LIKE ? OR ar.Name LIKE ?)`;
+      params.push(`%${search}%`, `%${search}%`);
     }
+
     if (artistId) {
-      conditions.push('a.ArtistId = ?');
+      sql += ` AND a.ArtistId = ?`;
+      countSql += ` AND a.ArtistId = ?`;
       params.push(artistId);
     }
 
-    if (conditions.length > 0) {
-      sql += ' WHERE ' + conditions.join(' AND ');
-    }
+    // 정렬 추가
+    sql += ` ORDER BY ${sortBy} ${sortOrder === 'desc' ? 'DESC' : 'ASC'}`;
 
-    sql += ' GROUP BY a.AlbumId';
-    sql += ` ORDER BY ${sortBy} ${sortOrder.toUpperCase()}`;
+    // 페이징 추가
     sql += ` LIMIT ? OFFSET ?`;
-    params.push(limit, (page - 1) * limit);
+    const queryParams = [...params];
+    const countQueryParams = [...params];
+    queryParams.push(limit, offset);
 
-    const dbInstance = db.DatabaseManager.getInstance();
-    const dbConnection = dbInstance.getConnection();
-
-    const stmt = dbConnection.prepare(sql);
-    const albums = stmt.all(...params) as (AlbumRow & {
-      ArtistName: string;
-      TrackCount: number;
-      TotalDuration: number;
-    })[];
+    const countStmt = dbConnection.prepare(countSql);
+    const countResult = countStmt.get(...countQueryParams) as { total: number };
+    const total = countResult.total;
     
-    const totalCountStmt = dbConnection.prepare(`
-      SELECT COUNT(DISTINCT a.AlbumId) as total 
-      FROM Album a
-      ${conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : ''}
-    `);
-    const { total } = totalCountStmt.get(...params.slice(0, -2)) as { total: number };
+    const stmt = dbConnection.prepare(sql);
+    const items = stmt.all(...queryParams);
 
-    return createSuccessResponse({
-      items: albums,
+    const totalPages = Math.ceil(total / limit);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    return NextResponse.json(createSuccessResponse({
+      items,
       pagination: {
         page,
         limit,
         total,
-        totalPages: Math.ceil(total / limit)
+        totalPages,
+        hasNextPage,
+        hasPreviousPage
       }
-    });
+    }));
   } catch (error) {
     return handleApiError(error);
   }
@@ -91,67 +109,94 @@ export async function POST(req: NextRequest) {
     const { Title, ArtistId } = body;
 
     if (!Title || !ArtistId) {
-      return createErrorResponse('Title and ArtistId are required', 400);
+      return NextResponse.json(createErrorResponse('Title and ArtistId are required', 400));
     }
 
-    db.connect();
-    const albumId = db.insert('Album', { Title, ArtistId });
+    const db = DatabaseManager.getInstance();
+    const dbConnection = db.getConnection();
+
+    const stmt = dbConnection.prepare(
+      'INSERT INTO Album (Title, ArtistId) VALUES (?, ?)'
+    );
+    const result = stmt.run(Title, ArtistId);
     
-    const album = db.queryOne<AlbumRow>('SELECT * FROM Album WHERE AlbumId = ?', [albumId]);
-    return createSuccessResponse(album, 'Album created successfully');
+    const album = dbConnection.prepare('SELECT * FROM Album WHERE AlbumId = ?')
+      .get(result.lastInsertRowid) as AlbumRow;
+
+    return NextResponse.json(createSuccessResponse(album, 'Album created successfully'));
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// PUT /api/albums?id=:id
+// PUT /api/albums
 export async function PUT(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get('id');
     if (!id) {
-      return createErrorResponse('Album ID is required', 400);
+      return NextResponse.json(createErrorResponse('Album ID is required', 400));
     }
 
     const body = await req.json();
     const { Title, ArtistId } = body;
 
     if (!Title && !ArtistId) {
-      return createErrorResponse('At least one field to update is required', 400);
+      return NextResponse.json(createErrorResponse('At least one field to update is required', 400));
     }
 
-    db.connect();
-    const updateData: Partial<AlbumRow> = {};
-    if (Title) updateData.Title = Title;
-    if (ArtistId) updateData.ArtistId = ArtistId;
+    const db = DatabaseManager.getInstance();
+    const dbConnection = db.getConnection();
 
-    const changes = db.update('Album', updateData, 'AlbumId = ?', [id]);
-    if (changes === 0) {
-      return createErrorResponse('Album not found', 404);
+    const updateFields: string[] = [];
+    const params: (string | number)[] = [];
+
+    if (Title) {
+      updateFields.push('Title = ?');
+      params.push(Title);
+    }
+    if (ArtistId) {
+      updateFields.push('ArtistId = ?');
+      params.push(ArtistId);
+    }
+    params.push(Number(id));
+
+    const stmt = dbConnection.prepare(
+      `UPDATE Album SET ${updateFields.join(', ')} WHERE AlbumId = ?`
+    );
+    const result = stmt.run(...params);
+
+    if (result.changes === 0) {
+      return NextResponse.json(createErrorResponse('Album not found', 404));
     }
 
-    const album = db.queryOne<AlbumRow>('SELECT * FROM Album WHERE AlbumId = ?', [id]);
-    return createSuccessResponse(album, 'Album updated successfully');
+    const album = dbConnection.prepare('SELECT * FROM Album WHERE AlbumId = ?')
+      .get(id) as AlbumRow;
+
+    return NextResponse.json(createSuccessResponse(album, 'Album updated successfully'));
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-// DELETE /api/albums?id=:id
+// DELETE /api/albums
 export async function DELETE(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get('id');
     if (!id) {
-      return createErrorResponse('Album ID is required', 400);
+      return NextResponse.json(createErrorResponse('Album ID is required', 400));
     }
 
-    db.connect();
-    const changes = db.remove('Album', 'AlbumId = ?', [id]);
+    const db = DatabaseManager.getInstance();
+    const dbConnection = db.getConnection();
+
+    const stmt = dbConnection.prepare('DELETE FROM Album WHERE AlbumId = ?');
+    const result = stmt.run(id);
     
-    if (changes === 0) {
-      return createErrorResponse('Album not found', 404);
+    if (result.changes === 0) {
+      return NextResponse.json(createErrorResponse('Album not found', 404));
     }
 
-    return createSuccessResponse(null, 'Album deleted successfully');
+    return NextResponse.json(createSuccessResponse(null, 'Album deleted successfully'));
   } catch (error) {
     return handleApiError(error);
   }

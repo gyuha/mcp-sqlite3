@@ -1,13 +1,27 @@
 'use client';
 
+import { useState } from 'react';
 import { Album } from '@/types/database';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { useAlbums } from '@/lib/hooks';
+import { useAlbums, AlbumFilters } from '@/lib/hooks';
 import LoadingSpinner from '@/components/ui/loading';
 import ErrorMessage from '@/components/ui/error';
 
 export default function AlbumsPage() {
-  const { data: albums, isLoading, error, refetch } = useAlbums();
+  const [filters, setFilters] = useState<AlbumFilters>({
+    page: 1,
+    limit: 9,
+    sortBy: 'Title',
+    sortOrder: 'asc',
+  });
+
+  const { data, isLoading, error, refetch } = useAlbums(filters);
+  const albums = data?.items ?? [];
+  const pagination = data?.pagination;
+
+  const handlePageChange = (newPage: number) => {
+    setFilters(prev => ({ ...prev, page: newPage }));
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -25,22 +39,56 @@ export default function AlbumsPage() {
       </div>
       
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {albums?.map((album) => (
+        {albums.map((album) => (
           <Card key={album.AlbumId}>
             <CardHeader>
               <CardTitle>{album.Title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <a
-                href={`/albums/${album.AlbumId}`}
-                className="text-blue-600 hover:underline"
-              >
-                자세히 보기 →
-              </a>
+              <div className="flex flex-col space-y-2">
+                <span className="text-sm text-gray-500">
+                  아티스트: {album.ArtistName}
+                </span>
+                <span className="text-sm text-gray-500">
+                  트랙 수: {album.TrackCount}
+                </span>
+                <a
+                  href={`/albums/${album.AlbumId}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  자세히 보기 →
+                </a>
+              </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {pagination && (
+        <div className="flex justify-center mt-6 space-x-2">
+          <button
+            className={`px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+              !pagination.hasPreviousPage ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={() => handlePageChange(filters.page! - 1)}
+            disabled={!pagination.hasPreviousPage}
+          >
+            이전
+          </button>
+          <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md">
+            {pagination.page} / {pagination.totalPages}
+          </span>
+          <button
+            className={`px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 ${
+              !pagination.hasNextPage ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={() => handlePageChange(filters.page! + 1)}
+            disabled={!pagination.hasNextPage}
+          >
+            다음
+          </button>
+        </div>
+      )}
     </div>
   );
 }

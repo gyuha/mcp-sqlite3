@@ -27,13 +27,55 @@ interface AlbumResponse {
   ArtistId: number;
 }
 
-export function useAlbums() {
-  return useQuery({
-    queryKey: ['albums'],
+export interface PaginatedResponse<T> {
+  items: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
+export interface AlbumFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  artistId?: string;
+}
+
+export function useAlbums(filters: AlbumFilters = {}) {
+  const {
+    page = 1,
+    limit = 10,
+    search = '',
+    sortBy = 'Title',
+    sortOrder = 'asc',
+    artistId
+  } = filters;
+
+  const queryKey = ['albums', page, limit, search, sortBy, sortOrder, artistId];
+
+  return useQuery<PaginatedResponse<Album>>({
+    queryKey,
     queryFn: async () => {
-      const response = await apiClient.get<{ data: { items: AlbumResponse[] } }>('/albums');
-      return response.data.items;
-    },
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        sortBy,
+        sortOrder
+      });
+
+      if (search) params.set('search', search);
+      if (artistId) params.set('artistId', artistId);
+
+      const response = await apiClient.get<PaginatedResponse<Album>>(`/albums?${params}`);
+      return response;
+    }
   });
 }
 
