@@ -1,0 +1,25 @@
+{
+  "tasks": [
+    {
+      "id": "81ed0638-0374-4335-8e24-c2eb4ab810c7",
+      "name": "데이터베이스 연결 설정",
+      "description": "Next.js 애플리케이션에서 SQLite3 데이터베이스 연결을 설정하고 기본 쿼리 유틸리티 함수를 구현합니다.",
+      "notes": "데이터베이스 연결은 싱글톤 패턴을 사용하여 구현하고, 연결 풀을 관리합니다.",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-21T05:17:50.503Z",
+      "updatedAt": "2025-05-21T05:19:11.186Z",
+      "relatedFiles": [
+        {
+          "path": "/Users/gyuha/workspace/mcp-sqlite3/nextjs-app/src/lib/db.ts",
+          "type": "CREATE",
+          "description": "데이터베이스 연결 및 쿼리 유틸리티"
+        }
+      ],
+      "implementationGuide": "1. better-sqlite3 설치 및 설정\n2. 데이터베이스 연결 유틸리티 구현\n3. 기본 CRUD 작업을 위한 유틸리티 함수 구현\n4. 에러 처리 및 로깅 구현",
+      "verificationCriteria": "1. 데이터베이스 연결이 성공적으로 수행되는지 확인\n2. 기본 CRUD 작업이 정상적으로 동작하는지 확인\n3. 에러 처리가 적절히 이루어지는지 확인",
+      "summary": "데이터베이스 연결과 기본 쿼리 유틸리티가 성공적으로 구현되었습니다. 아래와 같은 기능들이 구현되었습니다:\n\n1. 싱글톤 패턴을 사용한 데이터베이스 연결 관리\n2. 트랜잭션 지원\n3. CRUD 작업을 위한 유틸리티 함수\n4. 페이지네이션 지원\n5. 에러 처리 및 로깅\n6. 타입 안전성 보장",
+      "completedAt": "2025-05-21T05:19:11.186Z"
+    }
+  ]
+}

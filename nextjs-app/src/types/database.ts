@@ -1,11 +1,11 @@
 import type { Statement, RunResult as SqliteRunResult } from 'better-sqlite3';
 
 export interface Album {
-  AlbumId: number;
-  Title: string;
-  ArtistId: number;
-  artistName?: string;
-  trackCount?: number;
+  albumId: number;       // AlbumId -> albumId
+  title: string;        // Title -> title
+  artistId: number;
+  artistName: string;   // ArtistName -> artistName
+  trackCount: number;   // TrackCount -> trackCount
 }
 
 export interface Artist {

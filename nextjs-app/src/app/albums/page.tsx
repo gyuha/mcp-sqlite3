@@ -15,8 +15,14 @@ export default function AlbumsPage() {
     sortOrder: 'asc',
   });
 
-  const { data, isLoading, error, refetch } = useAlbums(filters);
-  const albums = data?.items ?? [];
+  const { data, isLoading, error, refetch } = useAlbums(filters) as {
+    data: { items: Album[]; pagination: any } | undefined;
+    isLoading: boolean;
+    error: Error | null;
+    refetch: () => void;
+  };
+  
+  const albums: Album[] = data?.items ?? [];
   const pagination = data?.pagination;
 
   const handlePageChange = (newPage: number) => {
@@ -39,21 +45,21 @@ export default function AlbumsPage() {
       </div>
       
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {albums.map((album) => (
-          <Card key={album.AlbumId}>
+        {albums.map((album: Album) => (
+          <Card key={album.albumId}>
             <CardHeader>
-              <CardTitle>{album.Title}</CardTitle>
+              <CardTitle>{album.title}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col space-y-2">
                 <span className="text-sm text-gray-500">
-                  아티스트: {album.ArtistName}
+                  아티스트: {album.artistName}
                 </span>
                 <span className="text-sm text-gray-500">
-                  트랙 수: {album.TrackCount}
+                  트랙 수: {album.trackCount}
                 </span>
                 <a
-                  href={`/albums/${album.AlbumId}`}
+                  href={`/albums/${album.albumId}`}
                   className="text-blue-600 hover:underline"
                 >
                   자세히 보기 →

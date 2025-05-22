@@ -1,0 +1,30 @@
+{
+  "tasks": [
+    {
+      "id": "f41d49d5-6e26-4c74-9474-a9e9e832d31a",
+      "name": "Album 인터페이스 정의 수정",
+      "description": "Album 타입에 필요한 모든 속성을 추가하여 타입 오류 해결",
+      "notes": "TypeScript 네이밍 컨벤션(camelCase)을 준수하여 인터페이스 정의",
+      "status": "已完成",
+      "dependencies": [],
+      "createdAt": "2025-05-22T03:50:52.465Z",
+      "updatedAt": "2025-05-22T03:51:06.660Z",
+      "relatedFiles": [
+        {
+          "path": "/Users/gyuha/workspace/mcp-sqlite3/nextjs-app/src/types/database.ts",
+          "type": "TO_MODIFY",
+          "description": "Album 인터페이스 정의 파일"
+        },
+        {
+          "path": "/Users/gyuha/workspace/mcp-sqlite3/nextjs-app/src/app/albums/page.tsx",
+          "type": "REFERENCE",
+          "description": "Album 인터페이스를 사용하는 페이지 컴포넌트"
+        }
+      ],
+      "implementationGuide": "1. /src/types/database.ts 파일에 Album 인터페이스를 정의\n2. 필요한 속성 추가: albumId (number), title (string), artistName (string), trackCount (number)\n3. 기존 코드와의 호환성 확인",
+      "verificationCriteria": "1. 모든 필요한 속성이 올바른 타입으로 정의되어 있는지 확인\n2. page.tsx의 타입 오류가 모두 해결되었는지 확인\n3. TypeScript 컴파일러 오류가 없는지 확인",
+      "summary": "Album 인터페이스에 필요한 모든 속성 (albumId, title, artistName, trackCount)을 추가하고 올바른 타입을 정의했습니다. 이로써 page.tsx의 모든 타입 오류가 해결되었으며, TypeScript 네이밍 컨벤션을 준수하여 구현했습니다.",
+      "completedAt": "2025-05-22T03:51:06.659Z"
+    }
+  ]
+}
